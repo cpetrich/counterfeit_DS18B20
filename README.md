@@ -46,7 +46,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Write scratchpad-bug (0x4E):
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
 	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
-* Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
+* Does not return data on undocumented function code 0x68. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94".
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C). Very little if any temperature discretization noise.
 * Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion.
@@ -62,7 +62,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Write scratchpad-bug (0x4E):
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
 	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
-* Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
+* Does not return data on undocumented function code 0x68. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94".
 * Typical temperature offset at at 0 °C is -0.5 °C. Very little if any temperature discretization noise.
 * Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion.
@@ -74,7 +74,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 ### Family C: Small Offset at 0 °C
 * ROM patterns: 28-ss-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0x0c``.
-* Does not respond to function code 0x68 or any other undocumented function code.
+* Does not return data on undocumented function code 0x68 or any other undocumented function code.
 * Typical temperature offset at at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
 * EEPROM endures only about eight (8) write cycles (function code 0x48).
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
@@ -86,7 +86,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 ### Family D: Noisy Rubbish
 * ROM patterns: 28-tt-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> == 0x81`` or ``<byte 6> == 0xA5``, ``<byte 5> != 0xff``.
-* Does not respond to command 0x68. Responds back with data for commands 0x8B, 0xBA, 0xBB, 0xDD, 0xEE, or a subset of those.
+* Does not return data on undocumented function code 0x68. Responds back with data after codes 0x8B, 0xBA, 0xBB, 0xDD, 0xEE, or a subset of those.
 * A (small?) subset of chips in this family contains a supercap rather than a proper EEPROM. Those chips retain the last temperature measurement between power cycles.
 * Temperature errors up to 3 °C at 0 °C. Depending on batch, either noisy data or very noisy data.
 * Sensors **do not work with Parasitic Power**
