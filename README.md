@@ -33,8 +33,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively. The bit patterns are very similar to each other within a production run, and Trim2 is unlikely to equal 0xff.
 * Temperature offset of current batches is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C (*i.e., not as shown on the datasheet. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago.*). Very little if any temperature discretization noise.
 
-Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
-Power-on Scratchpad: 50/05/4B/46/7F/**FF**/0C/**10**/1C
+- Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
+- Power-on Scratchpad: 50/05/4B/46/7F/**FF**/0C/**10**/1C
 
 ### Family B1: Matches Datasheet Temperature Offset Curve
 * ROM patterns:
@@ -45,9 +45,9 @@ Power-on Scratchpad: 50/05/4B/46/7F/**FF**/0C/**10**/1C
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94".
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C). Very little if any temperature discretization noise.
 
-Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
-Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
-Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
+- Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
+- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 
 ### Family B2: Low Temperature Offset at 0 °C
 * ROM patterns: 28-FF-tt-ss-ss-ss-ss-crc
@@ -56,8 +56,8 @@ Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94".
 * Typical temperature offset at at 0 °C is -0.5 °C. Very little if any temperature discretization noise.
 
-Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
-Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
+- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 
 ### Family C: Small Offset at 0 °C
 * ROM patterns: 28-ss-64-ss-ss-tt-tt-crc
@@ -65,8 +65,8 @@ Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 * Does not respond to command 0x68 or any other commands.
 * Typical temperature offset at at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
 
-Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
-Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
+- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 
 ### Family D: Noisy Rubbish
 * ROM patterns: 28-tt-tt-ss-ss-ss-ss-crc
@@ -76,19 +76,19 @@ Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 * Temperature errors up to 3 °C at 0 °C. Depending on batch, either noisy data or very noisy data.
 * Sensors **do not work with Parasitic Power**
 
-Example ROM: 28-1C-BC **-46-92-** 10-02-88
-Example ROM: 28-24-1D **-77-91-** 04-02-CE
-Example ROM: 28-90-FE **-79-97-** 00-03-20
-Example ROM: 28-FD-58 **-94-97-** 14-03-05
-Power-on Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
+- Example ROM: 28-1C-BC **-46-92-** 10-02-88
+- Example ROM: 28-24-1D **-77-91-** 04-02-CE
+- Example ROM: 28-90-FE **-79-97-** 00-03-20
+- Example ROM: 28-FD-58 **-94-97-** 14-03-05
+- Power-on Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
 
 ### Family E: Incomplete Work
 * ROM patterns: 28-tt-tt-ss-ss-00-80-crc
 * Scratchpad register ``<byte 7> == 0xff``, ``<byte 6> == 0xff``.
 * Contains no EEPROM.
 
-Example ROM: 28-9E-9C-1F **-00-00-80-** 04
-Power-on Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
+- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
+- Power-on Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
 
 
 (*Information on chips of Families A, B, C, and D comes from own investigations of the sensors in conjunction with the references below. Information on chips of Family E comes from web searches.*)
