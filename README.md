@@ -5,7 +5,7 @@
 > License: CC BY.
 
 ## Why should I care?
-Besides ethical concerns, some of the counterfeit sensors actually do not contain an EEPROM, do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, have unspecified failure rates and timing requirements for EEPROM writes, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
+Besides ethical concerns, some of the counterfeit sensors actually do not contain an EEPROM, do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, have unspecified failure rates and bugs, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
 ## Are they clones?
 No, as of writing (2019) all counterfeits  behave differently electrically from the authentic Maxim products and can be distinguished easily from the originals. The manufacturers of the counterfeits have not attempted to disguise their counterfeit nature electrically, and even use topmarks with production date--batch code combinations different from the ones used by Maxim.
@@ -40,7 +40,10 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * ROM patterns:
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 6> == 0x0c``. (May change of EEPROM writes.)
+* Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
+* Write-scratchpad bug (0x4E):
+	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
+	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94".
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C). Very little if any temperature discretization noise.
@@ -51,7 +54,10 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 ### Family B2: Low Temperature Offset at 0 °C
 * ROM patterns: 28-FF-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 6> == 0x0c``. (May change of EEPROM writes.)
+* Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
+* Write-scratchpad bug (0x4E):
+	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
+	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94".
 * Typical temperature offset at at 0 °C is -0.5 °C. Very little if any temperature discretization noise.
