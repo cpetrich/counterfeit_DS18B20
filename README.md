@@ -35,7 +35,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Polling after function code 0x44 indicates approx. 600 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
-- Power-on Scratchpad: 50/05/4B/46/7F/**FF**/0C/**10**/1C
+- Power-on Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS DS18B20 1932C4 +786AB
 
 ### Family B1: Matches Datasheet Temperature Offset Curve
@@ -75,7 +75,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * ROM patterns: 28-ss-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0x0c``.
 * Does not return data on undocumented function code 0x68 or any other undocumented function code.
-* Typical temperature offset at at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
+* Typical temperature offset at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
 * EEPROM endures only about eight (8) write cycles (function code 0x48).
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
 
