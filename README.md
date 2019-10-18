@@ -1,5 +1,5 @@
-# Your DS18B20 temperature probe is likely a fake, counterfeit, clone...
-...that is, unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors.
+# Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
+...that is, unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, all sensors we bought on ebay were counterfeit.
 
 > Author: Chris Petrich, October 2019.
 > License: CC BY.
@@ -27,11 +27,12 @@ In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, German
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run, and *crc* is the CRC8 checksum defined in the datasheet.
 
-### Family A: Authentic Maxim
+### Family A: Authentic Maxim DS18B20
 * ROM pattern: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all successful temperature conversions, and ``0x00 < <byte 6> <= 0x10``.
 * Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively. The bit patterns are very similar to each other within a production run, and Trim2 is unlikely to equal 0xff.
 * Temperature offset of current batches is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C (*i.e., not as shown on the datasheet. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago.*). Very little if any temperature discretization noise.
+* Polling after function code 0x44 indicates approx. 600 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Power-on Scratchpad: 50/05/4B/46/7F/**FF**/0C/**10**/1C
@@ -42,27 +43,29 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
-* Write-scratchpad bug (0x4E):
+* Write scratchpad-bug (0x4E):
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
 	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94".
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C). Very little if any temperature discretization noise.
+* Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
 - Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
-### Family B2: Low Temperature Offset at 0 °C
+### Family B2: -0.5 °C Temperature Offset at 0 °C
 * ROM patterns: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
-* Write-scratchpad bug (0x4E):
+* Write scratchpad-bug (0x4E):
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
 	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not respond to command 0x68. Does respond to commands 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94".
 * Typical temperature offset at at 0 °C is -0.5 °C. Very little if any temperature discretization noise.
+* Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
@@ -70,12 +73,14 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 ### Family C: Small Offset at 0 °C
 * ROM patterns: 28-ss-64-ss-ss-tt-tt-crc
-* Scratchpad register ``<byte 6> == 0x0c``. Always.
-* Does not respond to function code 0x68 or any other undocumented function codes.
+* Scratchpad register ``<byte 6> == 0x0c``.
+* Does not respond to function code 0x68 or any other undocumented function code.
 * Typical temperature offset at at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
+* EEPROM endures only about eight (8) write cycles (function code 0x48).
+* Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
-- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Power-on Scratchpad: 50/05/55/00/7F/FF/0C/10/21
 - Example topmark: DALLAS DS18B20 1810C4 +158AC
 
 ### Family D: Noisy Rubbish
@@ -85,6 +90,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * A (small?) subset of chips in this family contains a supercap rather than a proper EEPROM. Those chips retain the last temperature measurement between power cycles.
 * Temperature errors up to 3 °C at 0 °C. Depending on batch, either noisy data or very noisy data.
 * Sensors **do not work with Parasitic Power**
+* Polling after function code 0x44 indicates approx. 500-550 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28-1C-BC **-46-92-** 10-02-88
 - Example ROM: 28-24-1D **-77-91-** 04-02-CE
@@ -102,7 +108,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Power-on Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
 
 
-(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below. Information on chips of Family E comes from web searches.*)
+(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below. Tests were performed at 5 V with 1.2 kOhm pull-up. Information on chips of Family E comes from web searches.*)
 
 ## References
 * [DS18B20](https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf) "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet, Maxim Integrated.
