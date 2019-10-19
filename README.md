@@ -53,7 +53,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
-- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
 ### Family B2: -0.5 °C Temperature Offset at 0 °C
@@ -68,7 +68,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
-- Power-on Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
 ### Family C: Small Offset at 0 °C
@@ -80,7 +80,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
-- Power-on Scratchpad: 50/05/55/00/7F/FF/0C/10/21
+- Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
 - Example topmark: DALLAS DS18B20 1810C4 +158AC
 
 ### Family D: Noisy Rubbish
@@ -96,7 +96,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-24-1D **-77-91-** 04-02-CE
 - Example ROM: 28-90-FE **-79-97-** 00-03-20
 - Example ROM: 28-FD-58 **-94-97-** 14-03-05
-- Power-on Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
+- Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
 ### Family E: Incomplete Work
@@ -105,7 +105,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Contains no EEPROM.
 
 - Example ROM: 28-9E-9C-1F **-00-00-80-** 04
-- Power-on Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
+- Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
 
 
 (*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below. Tests were performed at 5 V with 1.2 kOhm pull-up. Information on chips of Family E comes from web searches.*)
