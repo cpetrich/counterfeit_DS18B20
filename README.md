@@ -35,7 +35,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Polling after function code 0x44 indicates approx. 600 ms for a 12-bit temperature conversion.
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
-- Power-on Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
+- Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS DS18B20 1932C4 +786AB
 
 ### Family B1: Matches Datasheet Temperature Offset Curve
