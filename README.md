@@ -78,6 +78,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Typical temperature offset at 0 °C is +0.05 °C. Very little if any temperature discretization noise.
 * EEPROM endures only about eight (8) write cycles (function code 0x48).
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
+* Operates in 12-bit conversion mode, only (configuration byte is fixed at ``0x7f``).
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
