@@ -38,6 +38,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively. The bit patterns are very similar to each other within a production run, and Trim2 is unlikely to equal 0xff.
 * Temperature offset of current batches is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C (*i.e., not as shown on the datasheet. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago.*). Very little if any temperature discretization noise.
 * Polling after function code 0x44 indicates approx. 600 ms for a 12-bit temperature conversion.
+* It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
