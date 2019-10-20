@@ -11,16 +11,22 @@ Besides ethical concerns, some of the counterfeit sensors actually do not contai
 IMHO, they are not clones, they are counterfeits (fakes). They are not clones because, as of writing (2019), all counterfeits behave differently electrically from the authentic Maxim products and can be distinguished easily from the originals. The manufacturers of the counterfeits have not attempted to disguise their counterfeit nature electrically, and even use topmarks with production date--batch code combinations different from the ones used by Maxim. However, I consider them counterfeits because their topmarks wrongly implies they were produced by ``Dallas`` (i.e., a shorthand for a company bought by Maxim).
 
 ## How do I know if I am affected?
-On the one hand, one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy). On the other hand one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should definitely be the case for sensors that share a die code (which has been ``C4`` since at least 2012).
+(I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should definitely be the case for sensors that share a die code (which has been ``C4`` since at least some time in 2011).
 
-Regarding the former, the only clear difference between what the datasheet says should happen and what the sensors do is in the content of the scratchpad register in Families D and E (below): the temperature reading right after power-up is not 85 °C, and/or reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively.
+Regarding (I), discrepancy between what the datasheet says should happen and what the sensors do include
+* the content of the scratchpad register in Families D and E (see below): the temperature reading right after power-up is not 85 °C, and/or reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively.
+* the apparently very small number of EEPROM write cycles in Family C
+* dysfunctional parasitic power mode in Family D
+* temperature readings outside the specification, affecting mostly sensors of Family D
+* the missing EEPROM in Family E
+However, heuristic methods (II) will have to be used to identify sensors of Family B as counterfeit.
 
-However, there are simple tests for differences with Maxim-produced DS18B20 sensors (``C4`` die) that apparently *all* counterfeit sensors fail. The most straight-forward software tests are probably these:
+Regarding (II), there are simple tests for differences with Maxim-produced DS18B20 sensors (``C4`` die) that apparently *all* counterfeit sensors fail. The most straight-forward software tests are probably these:
 1. It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx. (Maxim's ROM is essentially a mostly chronological serial number (mostly, but not strictly when compared with the date code on the case).)
 2. It is a fake if ``<byte 6> == 0`` or ``<byte 6> > 0x10`` in the scratchpad register, or if the following scratchpad register relationship applies after **any** *successful* temperature conversion: ``(<byte 0> + <byte 6>) & 0x0f != 0`` (*12-bit mode*).
 3. It is a fake if the chip returns data to simple queries of undocumented function codes other than 0x68 and 0x93. (*As of writing (2019), this can actually be simplified to: it is a fake if the return value to sending code 0x68 is ``0xff``.*)
 
-In addition, not necessarily working for all sensors but apparently for a significant number:
+Alternatively,
 * It is a fake if the date--batch combination printed on the case of the sensor is not in the Maxim database (need to ask Maxim tech support to find out).
 
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit. Based on my experience, a sensor that will fail any of the three software tests will fail all of them.
@@ -132,6 +138,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28-9E-9C-1F **-00-00-80-** 04
 - Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
+
+##Warning
+**Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet.
 
 
 (*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below. Tests were performed at 5 V with 1.2 kOhm pull-up. Information on chips of Family E comes from web searches.*)
