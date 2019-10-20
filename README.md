@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...that is, unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 19 October 2019.
+> Author: Chris Petrich, 20 October 2019.
 > License: CC BY.
 
 ## Why should I care?
@@ -44,8 +44,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	- 28-tt-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
 * Write scratchpad-bug (0x4E):
-	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
-	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
+	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94".
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C). Very little if any temperature discretization noise.
@@ -60,8 +60,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * ROM patterns: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``).
 * Write scratchpad-bug (0x4E):
-	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to ``0x7f``,
-	- 5 data bytes should be sent with function code 0x4E instead where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
+	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97.
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94".
 * Typical temperature offset at at 0 °C is -0.5 °C. Very little if any temperature discretization noise.
