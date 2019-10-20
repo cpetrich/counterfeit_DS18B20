@@ -11,8 +11,10 @@ Besides ethical concerns, some of the counterfeit sensors actually do not contai
 IMHO, they are not clones, they are counterfeits (fakes). They are not clones because, as of writing (2019), all counterfeits behave differently electrically from the authentic Maxim products and can be distinguished easily from the originals. The manufacturers of the counterfeits have not attempted to disguise their counterfeit nature electrically, and even use topmarks with production date--batch code combinations different from the ones used by Maxim. However, I consider them counterfeits because their topmarks wrongly implies they were produced by ``Dallas`` (i.e., a shorthand for a company bought by Maxim).
 
 ## How do I know if I am affected?
-These are the simplest tests that I can think of:
-* There are at least 3 simple tests that can be done by sending one-wire commands to the sensor:
+To get it out of the way, there are trivial tests of compliance with the datasheet that *some* counterfeit sensors fail (Families D and E, below), e.g., is the temperature reading right after power-up 85 °C, and are reserved bytes 5 and 7 of the scratchpad register ``0xff`` and ``0x10``, respectively.
+
+Then there are simple tests that apparently *all* counterfeit sensors fail. The most stright-forward tests are probably these:
+* Tests that can be done by sending one-wire commands to the sensor:
 	1. It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx.
 	2. It is a fake if ``<byte 6> == 0`` or ``<byte 6> > 0x10`` in the scratchpad register, or if the following scratchpad register relationship applies after **any** *successful* temperature conversion: ``(<byte 0> + <byte 6>) & 0x0f != 0`` (*12-bit mode*).
 	3. It is a fake if the chip returns data to simple queries of undocumented function codes other than 0x68 and 0x93. (*As of writing (2019), this can actually be simplified to: it is a fake if the return value to sending code 0x68 is ``0xff``.*)
@@ -21,7 +23,7 @@ These are the simplest tests that I can think of:
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit. Based on my experience, a sensor that will fail any of the three software tests will fail all three of the software tests.
 
 ## What families of DS18B20-like chips can I expect to encounter?
-Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 4 other companies (Families B, C, D, and E).
+Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 4 other companies (Families B, C, D, and E). The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental.
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
 
@@ -80,25 +82,43 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * EEPROM endures only about eight (8) write cycles (function code 0x48).
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion.
 * Operates in 12-bit conversion mode, only (configuration byte is fixed at ``0x7f``).
+* Default alarm register settings differ from Family A.
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
 - Example topmark: DALLAS DS18B20 1810C4 +158AC
 
-### Family D: Noisy Rubbish
+### Family D1: Noisy Rubbish
 * ROM patterns: 28-tt-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> == 0x81`` or ``<byte 6> == 0xA5``, ``<byte 5> != 0xff``.
-* Does not return data on undocumented function code 0x68. Responds back with data after codes 0x8B, 0xBA, 0xBB, 0xDD, 0xEE, or a subset of those.
-* A (small?) subset of chips in this family contains a supercap rather than a proper EEPROM. Those chips retain the last temperature measurement between power cycles.
+* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x81`` and ``<byte 5> != 0xff``.
+* Does not return data on undocumented function code 0x68. Responds back with data or status information after codes 
+	+ 0x4D, 0x8B, 0xBA, 0xBB, 0xDD, 0xEE, or
+	+ 0x4D, 0x8B, 0xBA, 0xBB.
 * Temperature errors up to 3 °C at 0 °C. Depending on batch, either noisy data or very noisy data.
 * Sensors **do not work with Parasitic Power**
 * Polling after function code 0x44 indicates approx. 500-550 ms for a 12-bit temperature conversion.
+* Initial temperature reading is 25 °C. Default alarm register settings differ from Family A.
 
 - Example ROM: 28-1C-BC **-46-92-** 10-02-88
-- Example ROM: 28-24-1D **-77-91-** 04-02-CE
 - Example ROM: 28-90-FE **-79-97-** 00-03-20
 - Example ROM: 28-FD-58 **-94-97-** 14-03-05
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
+- Example topmark: DALLAS DS18B20 1827C4 +051AG
+
+### Family D2: Noisy Rubbish without EEPROM
+* ROM patterns: 28-tt-tt-77-91-ss-ss-crc
+* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> == 0x81`` and ``<byte 5> == 0x7e``.
+* Does not return data on undocumented function code 0x68. Responds back with data or status information after codes 0x4D, 0x8B, 0xBA, 0xBB.
+* It is possible to send arbitrary content for ROM code and for bytes 5, 6, and 7 of the status register after undocumented function codes 0xA3 and 0x66, respectively.
+* Temperature errors up to 3 °C at 0 °C. Very noisy data.
+* Sensors **do not work with Parasitic Power**
+* Polling after function code 0x44 indicates approx. 11 ms (eleven) for a 12-bit temperature conversion.
+* Chips contain a supercap rather than a proper EEPROM to hold alarm and configuration settings. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long.
+	+ The supercap retains memory for several minutes unless Vcc is pulled to GND, in which case memory retention is 5 to 30 seconds.
+* Initial temperature reading is 25 °C or the last reading before power-down. Default alarm register settings differ from Family A.
+	
+- Example ROM: 28-24-1D **-77-91-** 04-02-CE
+- Initial Scratchpad: 90/01/55/05/7F/7E/81/66/27
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
 ### Family E: Incomplete Work
