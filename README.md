@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...that is, unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 21 October 2019.
+> Author: Chris Petrich, 24 October 2019.
 > License: CC BY.
 
 ## Why should I care?
@@ -41,9 +41,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 ### Family A: Authentic Maxim DS18B20
 * ROM pattern: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all successful temperature conversions, and ``0x00 < <byte 6> <= 0x10``.
-* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively. The bit patterns are very similar to each other within a production run, and Trim2 is unlikely to equal 0xff.
-* Temperature offset of current batches is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C (*i.e., not as shown on the datasheet. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago.*). Very little if any temperature discretization noise.
-* Polling after function code 0x44 indicates approx. 600 ms for a 12-bit temperature conversion.
+* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively. The bit patterns are very similar to each other within a production run. Trim2 is currently less likely to equal 0xff than Trim1. Trim2 was 0xDB or 0xDC around 2011 through 2013 or later, and has been 0x74 (possibly 0x73 occasionally) since at least 2017 (all with ``C4`` die).
+* Temperature offset of current batches (2019) is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C (*i.e., not as shown on the datasheet. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago.*). Very little if any temperature discretization noise.
+* Polling after function code 0x44 indicates a spread of 590-610 ms between sensors for a 12-bit temperature conversion at room temperature. Conversion time is easily repeatable for individual chips. Lower resolutions cut the time in proportion, i.e. 11 bit-conversions take half the time.
 * It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
