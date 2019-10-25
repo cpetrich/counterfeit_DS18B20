@@ -49,7 +49,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 		- curve parameter = ``[t27, t26, t25, t24, t23]`` (unsigned 5 bit-value) \[5\].
 	+ Within a batch, the offset parameter seems to spread over 20 to 30 units while all sensors within the batch share the same curve parameter \[5\].
 	+ The offset parameter shifts the temperature output over a range of approx. 100 °C (0.053 °C per unit), while the curve parameter adjusts the temperature sensitivity by approximately up to 1% (tentative estimate) \[5\]. Example values of 2019 are ``offset = 0x420`` and ``curve = 0xE``, i.e. they lie pretty central within their respective ranges.
-* Temperature offset of current batches (2019) is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C \[6\] (*i.e., not as shown on the datasheet \[5\]. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago \[1\].*). Very little if any temperature discretization noise \[5\].
+* Temperature offset of current batches (2019) is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C \[6\] (*i.e., not as shown on the datasheet \[1\]. The plot on the datasheet stems from production runs at the time of introduction of the sensor 10+ years ago \[5\].*). Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates a spread of 590-610 ms between sensors for a 12-bit temperature conversion at room temperature \[5\]. Conversion time is easily repeatable for individual chips. Lower resolutions cut the time in proportion, i.e. 11 bit-conversions take half the time.
 * It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful \[5\] (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
@@ -146,6 +146,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-9E-9C-1F **-00-00-80-** 04
 - Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
 
+## MAX31820
+The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
+
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
 
@@ -161,3 +164,4 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 5. Own investigations 2019, unpublished.
 6. Petrich, C., M. O'Sadnick, Ø. Kleven, I. Sæther (2019). A low-cost coastal buoy for ice and metocean measurements. In Proceedings of the 25th International Conference on Port and Ocean Engineering under Arctic Conditions (POAC), Delft, The Netherlands, 9-13 June 2019, 6 pp.
 7. Contribution of user *m_elias* on https://forum.arduino.cc/index.php?topic=544145.15
+8. [MAX31820](https://datasheets.maximintegrated.com/en/ds/MAX31820.pdf) "1-Wire Ambient Temperature Sensor", Datasheet, Maxim Integrated.
