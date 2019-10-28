@@ -119,6 +119,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28-1C-BC **-46-92-** 10-02-88
 - Example ROM: 28-90-FE **-79-97-** 00-03-20
+- Example ROM: 28-FB-10 **-79-A2-** 00-03-88
 - Example ROM: 28-FD-58 **-94-97-** 14-03-05
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
