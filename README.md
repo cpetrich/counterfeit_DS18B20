@@ -11,6 +11,20 @@ Besides ethical concerns, some of the counterfeit sensors actually do not contai
 ## Are they clones?
 IMHO, they are not clones, they are counterfeits (fakes). They are not clones because, as of writing (2019), all counterfeits behave differently electrically from the authentic Maxim products and can be distinguished easily from the originals. The manufacturers of the counterfeits have not attempted to disguise their counterfeit nature electrically, and even use topmarks with production date--batch code combinations different from the ones used by Maxim. However, I consider them counterfeits because their topmarks wrongly implies they were produced by ``Dallas`` (i.e., a shorthand for a company bought by Maxim).
 
+## What do they look like?
+![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB](images/Maxim_DS18B20_chip.jpg)
+Above is an example of an **authentic**, Maxim-produced DS18B20 in TO-92 case. As of writing (2019), the topmark of original Maxim chips is lasered rather than printed. The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer), the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). The 3rd row specifies production year and week number of the year (in this case, week 32 of 2019), and the last two characters specify the revision of the die (``C4`` since at least late 2011). In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. From what I can tell, for a given character combination the number in the batch code increases as the date code increases albeit in non-obvious increments.
+
+The **counterfeit** DS18B20 I've come across in 2019 have the following notable features: 
+* The topmark is printed rather that lasered,
+* In row 3, the date code increases with time, i.e. it may actually be accurate. The die code is ``C4`` (2019).
+* The 4th row is rather independent of the date code and reads
+	+ Family B: ``+233AA``
+	+ Family C: ``+158AC``
+	+ Family D: ``+051AG``
+
+Note that manufacturing processes may change over time, so the above can only serve as a first indication.
+
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
