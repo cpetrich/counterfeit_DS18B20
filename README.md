@@ -1,5 +1,5 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
-...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, all but one sensor we bought on ebay were counterfeit.
+...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
 > Author: Chris Petrich, 8 November 2019.
 > License: CC BY.
@@ -156,7 +156,7 @@ The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up 
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
 
 
-(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1,2,3,4,5,6,8,9,10\]. Information on chips of Family E comes from web searches \[7\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
+(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Information on chips of Family E comes from web searches \[7\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
 
 ## References
 
