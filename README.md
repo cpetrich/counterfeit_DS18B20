@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 15 November 2019.
+> Author: Chris Petrich, 16 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -14,7 +14,7 @@ IMHO, they are not clones, they are counterfeits (fakes). They are not clones be
 ## What do they look like?
 ![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB](images/Maxim_DS18B20_chip.jpg)
 
-Above is an example of an **authentic**, Maxim-produced DS18B20 in TO-92 case. 
+Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 case. 
 * As of writing (2019), the topmark of original Maxim chips is lasered rather than printed. 
 * The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer),
 * the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
@@ -38,7 +38,6 @@ If the DS18B20 have been bought from authorized dealers though a controlled supp
 Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least some time in 2011 \[5\]) \[5\].
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
-* Family B: updating alarm settings and measurement resolution alters byte 5 in the scratchpad register (which should always read ``0xff``)
 * Family C: the sensor is fixed in 12-bit mode (i.e., byte 4 of the scratchpad register is always ``0x7f``)
 * Family C: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
 * Family B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
@@ -47,7 +46,7 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family D, E: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
 * Family D2, E: does not have an EEPROM
 
-Hence, no current counterfeit DS18B20 behaves as specified in the datasheet.
+Hence, one will need to use heuristics (II) to detect fakes of Family B.
 
 Regarding (II), there are simple tests for differences with Maxim-produced DS18B20 sensors (``C4`` die) that apparently *all* counterfeit sensors fail \[5\]. The most straight-forward software tests are probably these:
 1. It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (Maxim's ROM is essentially a mostly chronological serial number (mostly, but not strictly when compared with the date code on the case) \[5\].)
