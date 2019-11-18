@@ -43,6 +43,7 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
 * Family D: sensor does not respond in parasitic mode
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
+* Family D: sensor performs 12-bit conversion regardless of resolution setting
 * Family D, E: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
 * Family D2, E: does not have an EEPROM
 
@@ -94,7 +95,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
@@ -111,7 +112,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
@@ -124,8 +125,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
 * Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion \[5\].
-* Operates in 12-bit conversion mode, only (configuration byte is fixed at ``0x7f``) \[5\].
-* Default alarm register settings differ from Family A \[5\].
+* Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
+* Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
@@ -133,35 +134,40 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 ### Family D1: Noisy Rubbish
 * ROM patterns \[5\]: 28-tt-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x81`` and ``<byte 5> != 0xff`` \[5\].
+* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
-	+ 0x4D, 0x8B, 0xBA, 0xBB, 0xDD, 0xEE \[5\], or
-	+ 0x4D, 0x8B, 0xBA, 0xBB \[5\].
-* Temperature errors up to 3 °C at 0 °C \[6\]. Depending on batch, either noisy data or very noisy data \[5\].
-* Sensors **do not work with Parasitic Power** \[5\]
-* Polling after function code 0x44 indicates approx. 500-550 ms for a 12-bit temperature conversion \[5\].
-* Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A \[5\].
+	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB, 0xDD (3 bytes), 0xEE (3 bytes) \[5\], or
+	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB \[5\].
+* First byte following undocumented function code 0x8B is ``0x00`` \[5\].
+* Temperature errors up to 3 °C at 0 °C \[6\]. Noisy data \[5\].
+* Sensors **do not work with Parasitic Power**. Sensors draw data line low while powered parasitically \[5\].
+* Polling after function code 0x44 indicates approx. 490-550 ms for conversion regardless of measurement resolution \[5\].
+* Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
-- Example ROM: 28-1C-BC **-46-92-** 10-02-88
 - Example ROM: 28-90-FE **-79-97-** 00-03-20
 - Example ROM: 28-FB-10 **-79-A2-** 00-03-88
 - Example ROM: 28-FD-58 **-94-97-** 14-03-05
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
-### Family D2: Noisy Rubbish without EEPROM
+### Family D2: Noisy Rubbish with Supercap
 * ROM patterns \[5\]: 28-tt-tt-77-91-ss-ss-crc
-* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> == 0x81`` and ``<byte 5> == 0x7e`` \[5\].
-* Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 0x4D, 0x8B, 0xBA, 0xBB \[5\].
+* Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
+* Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
+	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB, 0xDD (5 bytes), 0xEE (5 bytes) \[5\], or
+	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB \[5\].
+* First byte following undocumented function code 0x8B is ``0x06`` \[5\].
 * It is possible to send arbitrary content for ROM code and for bytes 5, 6, and 7 of the status register after undocumented function codes 0xA3 and 0x66, respectively \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Very noisy data \[5\].
-* Sensors **do not work with Parasitic Power** \[5\]
-* Polling after function code 0x44 indicates approx. 11 ms (eleven) for a 12-bit temperature conversion \[5\].
-* Chips contain a supercap rather than a proper EEPROM to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
+* Sensors **do not work with Parasitic Power**. Sensors leave data line floating when powered parasitically \[5\].
+* Polling after function code 0x44 indicates approx. 11 ms (eleven) for conversion regardless of measurement resolution \[5\].
+* Chips **contain a supercap rather than an EEPROM** to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
 	+ The supercap retains memory for several minutes unless Vcc is pulled to GND, in which case memory retention is 5 to 30 seconds \[5\].
-* Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A \[5\].
-	
-- Example ROM: 28-24-1D **-77-91-** 04-02-CE
+* Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
+
+- Example ROM: 28-21-6D **-46-92-** 0A-02-B7
+- Example ROM: 28-B8-0E **-77-91-** 0E-02-D7
+- Example ROM: 28-24-1D **-77-91-** 04-02-CE  (responds to 0xDD and 0xEE)
 - Initial Scratchpad: 90/01/55/05/7F/7E/81/66/27
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
