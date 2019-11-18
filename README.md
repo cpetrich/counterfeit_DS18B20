@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 16 November 2019.
+> Author: Chris Petrich, 18 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -91,10 +91,10 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Write scratchpad-bug (0x4E) \[5\]:
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
 	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
-* Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\].
+* Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion \[5\].
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
@@ -108,10 +108,10 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
 	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 ``<byte 7>``, respectively.
-* Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\].
+* Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 650-700 ms for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion \[5\].
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
