@@ -56,10 +56,10 @@ Regarding (II), there are simple tests for differences with Maxim-produced DS18B
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D2
-* 30 ms: Family C
-* 490-550 ms: Family D1
-* 590-610 ms: Family A
-* 610-730 ms: Family B
+* 28-30 ms: Family C
+* 460-525 ms: Family D1
+* 580-615 ms: Family A
+* 585-730 ms: Family B
 
 Hence, there will be some edge cases between Families A and B, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
 
@@ -86,7 +86,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	+ Within a batch, the offset parameter seems to spread over 20 to 30 units while all sensors within the batch share the same curve parameter \[5\].
 	+ The offset parameter shifts the temperature output over a range of approx. 100 °C (0.053 °C per unit), while the curve parameter shifts the temperature over a range of 3.88 °C (0.12 °C per unit), at least in current versions of the chip \[5\]. Example values of 2019 are ``offset = 0x420`` and ``curve = 0x0E``, i.e. they lie pretty central within their respective ranges.
 * Temperature offset of current batches (2019) is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C \[6\] (*i.e., not as shown on the datasheet \[1,9\]. The plot on the datasheet stems from measurements at the time of introduction of the sensor 10+ years ago \[5,10\].*). Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates a spread of 590-610 ms between sensors for a 12-bit temperature conversion at room temperature \[5\]. Conversion time is easily repeatable for individual chips. Lower resolutions cut the time in proportion, i.e. 11 bit-conversions take half the time.
+* Polling after function code 0x44 indicates a spread of 584-615 ms between sensors for a 12-bit temperature conversion at room temperature \[5\]. Conversion time is easily repeatable for individual chips. Lower resolutions cut the time in proportion, i.e. 11 bit-conversions take half the time.
 * It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful \[5\] (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
@@ -104,7 +104,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
@@ -121,7 +121,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
-* Polling after function code 0x44 indicates approx. 610-730 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Polling after function code 0x44 indicates approx. 587-654 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
@@ -133,7 +133,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
-* Polling after function code 0x44 indicates 30 ms (thirty) for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
 
@@ -150,7 +150,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Noisy data \[5\].
 * Sensors **do not work with Parasitic Power**. Sensors draw data line low while powered parasitically \[5\].
-* Polling after function code 0x44 indicates approx. 490-550 ms for conversion regardless of measurement resolution \[5\].
+* Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\].
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-90-FE **-79-97-** 00-03-20
