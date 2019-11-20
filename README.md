@@ -128,14 +128,15 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
 ### Family C: Small Offset at 0 °C
-* ROM patterns \[5\]: 28-ss-64-ss-ss-tt-tt-crc
+* ROM patterns \[5\]: 28-FF-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0x0c`` \[5\].
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
-* Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\].
+* Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
+* *Note, not to be confused: there were chips with ROM pattern 28-61-64-ss-ss-tt-tt-crc and batch code ``+158AC`` that do not work in parasite mode and have a scratchpad register like Family E.*
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
