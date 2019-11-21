@@ -206,6 +206,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28-9E-9C-1F **-00-00-80-** 04
 - Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
+- Example topmark: DALLAS DS18B20 1742C4 +760AA
 
 ## MAX31820
 The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
