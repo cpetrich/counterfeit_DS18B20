@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 18 November 2019.
+> Author: Chris Petrich, 21 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -39,7 +39,7 @@ Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family C: the sensor is fixed in 12-bit mode (i.e., byte 4 of the scratchpad register is always ``0x7f``)
-* Family C: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
+* Family C2: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
 * Family B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
 * Family D: sensor does not respond in parasitic mode
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
@@ -56,7 +56,7 @@ Regarding (II), there are simple tests for differences with Maxim-produced DS18B
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D1
-* 28-30 ms: Family C
+* 28-30 ms: Family C2
 * 460-525 ms: Family D2
 * 580-615 ms: Family A
 * 585-730 ms: Family B
@@ -127,7 +127,20 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
-### Family C: Small Offset at 0 °C
+### Family C1: Incomplete Work
+*Summary based on web searches \[11\]*
+
+* ROM patterns \[5\]: 28-61-64-ss-ss-tt-tt-crc
+* Scratchpad register ``<byte 6> == 0xff``, ``<byte 7> == 0xff``.
+* Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always).
+* Does not work in parasitic power mode.
+* Default alarm register settings differ from Family A (``0xff`` and ``0xff``).
+
+- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
+- Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
+- Example topmark: DALLAS DS18B20 1722C4 +158AC
+
+### Family C2: Small Offset at 0 °C
 * ROM patterns \[5\]: 28-FF-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0x0c`` \[5\].
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
@@ -182,8 +195,11 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
 ### Family E: Incomplete Work
-* ROM patterns \[5,7\]: 28-tt-tt-ss-ss-00-80-crc
+*Summary based on web searches*
+
+* ROM patterns \[5,7\]: 28-tt-tt-ss-00-00-80-crc
 * Scratchpad register ``<byte 7> == 0xff``, ``<byte 6> == 0xff`` \[5,7\].
+* Default alarm register settings differ from Family A (``0xff`` and ``0xff``).
 * Contains no EEPROM \[7\].
 
 - Example ROM: 28-9E-9C-1F **-00-00-80-** 04
@@ -196,7 +212,7 @@ The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up 
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
 
 
-(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Information on chips of Family E comes from web searches \[7\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
+(*Information on chips of Families A, B, C2, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Information on chips of Families C1 and E comes from web searches \[7,11\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
 
 ## References
 
@@ -210,3 +226,4 @@ The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up 
 8. [MAX31820](https://datasheets.maximintegrated.com/en/ds/MAX31820.pdf) "1-Wire Ambient Temperature Sensor", Datasheet, Maxim Integrated.
 9. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet 043001, Dallas Semiconductor, 20pp.
 10. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Preliminary Datasheet 050400, Dallas Semiconductor, 27pp.
+11. Piecemeal from various blogs and posts.
