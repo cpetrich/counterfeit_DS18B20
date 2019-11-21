@@ -130,7 +130,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS DS18B20 1626C4 +233AA
 
 ### Family C1: Incomplete Work
-*Summary based on web searches \[11\]*
+*Summary based on web searches \[11\].*
 
 * ROM patterns \[5\]: 28-61-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0xff``, ``<byte 7> == 0xff``.
@@ -151,7 +151,6 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
-* *Note, not to be confused: there were chips with ROM pattern 28-61-64-ss-ss-tt-tt-crc and batch code ``+158AC`` that do not work in parasite mode and have a scratchpad register like Family E.*
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
@@ -198,7 +197,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
 ### Family E: Incomplete Work
-*Summary based on web searches*
+*Summary based on web searches \[7\].*
 
 * ROM patterns \[5,7\]: 28-tt-tt-ss-00-00-80-crc
 * Scratchpad register ``<byte 7> == 0xff``, ``<byte 6> == 0xff`` \[5,7\].
