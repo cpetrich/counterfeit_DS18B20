@@ -73,6 +73,8 @@ Besides the DS18B20 originally produced by Dallas Semiconductor and continued by
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
 
+Around 2018 chip production seems to have shifted from Family C1 to C2 and from Family D1 to D2, i.e. observation of chips of Families C1 and D1 in the wild should get increasingly rare \[5\]. In contrast, chips of both Families B1 and B2 are currently in active circulation (2019). By extension, there could be additional, older groups of counterfeit DS18B20 that are not listed here.
+
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
 ### Family A: Authentic Maxim DS18B20
@@ -177,7 +179,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
 ### Family D2: Noisy Rubbish
-* ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc
+* ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB, 0xDD (3 bytes), 0xEE (3 bytes) \[5\], or
@@ -185,12 +187,13 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
 * Sensors **do not work with Parasitic Power**. Sensors draw data line low while powered parasitically \[5\].
-* Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\].
+* Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-90-FE-79 **-97-** 00-03-20
 - Example ROM: 28-FD-58-94 **-97-** 14-03-05
 - Example ROM: 28-FB-10-79 **-A2-** 00-03-88
+- Example ROM: 28-29-7D-16 **-A8-** 01-3C-84
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
 - Example topmark: DALLAS DS18B20 1827C4 +051AG
 
