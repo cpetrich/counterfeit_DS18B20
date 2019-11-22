@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 21 November 2019.
+> Author: Chris Petrich, 22 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -20,7 +20,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
 * The 3rd row specifies production year and week number of the year (in this case, week 32 of 2019), and 
 * the last two characters in row 3 specify the revision of the die (``C4`` since at least late 2011). 
-* In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. From what I can tell, for a given character combination the number in the batch code increases as the date code increases albeit in non-obvious increments. Since 2016, I've only come across character combinations ``AB`` and ``AC``. In earlier chips I've seen ``AD`` and ``AI``.
+* In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. From what I can tell, for a given character combination the number in the batch code changes (usually increases) as the date code increases albeit in non-obvious increments. Since 2016, I've only come across character combinations ``AB`` and ``AC``. In earlier chips I've seen ``AD`` and ``AI``.
 
 The **counterfeit** DS18B20 I've come across in 2019 have the following notable features: 
 * The topmark is printed rather that lasered,
