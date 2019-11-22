@@ -26,7 +26,7 @@ The **counterfeit** DS18B20 I've come across in 2019 have the following notable 
 * The topmark is printed rather that lasered,
 * In row 3, the date code increases with time, i.e. it may actually be accurate. The die code is ``C4`` (2019).
 * The 4th row is rather independent of the date code and reads (list is likely incomplete)
-	+ Family B: ``+233AA`` or ``+887AB``
+	+ Family B: ``+051AG``, ``+138AB``, ``+233AA`` or ``+887AB``
 	+ Family C: ``+158AC``
 	+ Family D: ``+051AG``
 
@@ -73,7 +73,7 @@ Besides the DS18B20 originally produced by Dallas Semiconductor and continued by
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
 
-Around 2018 chip production seems to have shifted from Family C1 to C2 and from Family D1 to D2, i.e. observation of chips of Families C1 and D1 in the wild should get increasingly rare \[5\]. In contrast, chips of both Families B1 and B2 are currently in active circulation (2019). By extension, there could be additional, older groups of counterfeit DS18B20 that are not listed here.
+Around 2017/18 chip production seems to have shifted from Family C1 to C2 and from Family D1 to D2, i.e. future observation of chips of Families C1 and D1 in the wild should get increasingly rare \[5\]. In contrast, chips of both Families B1 and B2 are currently in active circulation (2019). By extension, there could be additional, older groups of counterfeit DS18B20 that are not listed here.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
