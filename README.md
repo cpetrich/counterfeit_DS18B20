@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 22 November 2019.
+> Author: Chris Petrich, 26 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -62,6 +62,14 @@ In addition to obvious implementation differences such as those listed above und
 * 585-730 ms: Family B
 
 Hence, there will be some edge cases between Families A and B, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
+
+An important aspect for operation is a sensor's ability to pull the data line low against the fixed pull-up resistor. Turns out this abilitly differs between families. The datasheet guarantees that a sensor is able to sink at least 4 mA at 0.4 V at any temperature up to 125 °C \[1\]. Providing a current of 4 mA (1.2 kOhm pull-up resistor against 5 V), the following ``low`` voltages were achieved by the sensors at room temperature (note that only 5 to 10 sensors were measured per Family):
+* Family A: 0.058 - 0.062 V
+* Family B2: 0.068 - 0.112 V (all but one sensor: 0.068 - 0.075 V)
+* Family C: 0.036 - 0.040 V
+* Family D2: 0.121 - 0.124 V
+
+All sensors are well within specs at room temperature but clustering of data by Family is apparent, indicating that the hardware was designed independently. It could be interesting to repeat these measurements above 100 °C.
 
 Alternatively,
 * It is a fake if the date--batch combination printed on the case of the sensor is not in the Maxim database (need to ask Maxim tech support to find out).
