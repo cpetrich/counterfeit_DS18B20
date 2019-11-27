@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 26 November 2019.
+> Author: Chris Petrich, 28 November 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -45,7 +45,7 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
 * Family D: sensor performs 12-bit conversion regardless of resolution setting
 * Family D, E: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
-* Family D2, E: does not have an EEPROM
+* Family D1, E: does not have an EEPROM
 
 Hence, one will need to use heuristics (II) to detect fakes of Family B.
 
