@@ -22,16 +22,6 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * the last two characters in row 3 specify the revision of the die (``C4`` since at least late 2011). 
 * In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. From what I can tell, for a given character combination the number in the batch code changes (usually increases) as the date code increases albeit in non-obvious increments. Since 2016, I've only come across character combinations ``AB`` and ``AC``. In earlier chips I've seen ``AD`` and ``AI``.
 
-The **counterfeit** DS18B20 I've come across in 2019 have the following notable features: 
-* The topmark is printed rather that lasered,
-* In row 3, the date code increases with time, i.e. it may actually be accurate. The die code is ``C4`` (2019).
-* The 4th row is rather independent of the date code and reads (list is likely incomplete)
-	+ Family B: ``+051AG``, ``+138AB``, ``+233AA`` or ``+887AB``
-	+ Family C: ``+158AC``
-	+ Family D: ``+051AG``
-
-Note that manufacturing processes may change over time. The above is valid as of 2019.
-
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
@@ -119,7 +109,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
-- Example topmark: DALLAS DS18B20 1626C4 +233AA
+- Example topmark: DALLAS 18B20 1626C4 +233AA
+- Example topmark: DALLAS 18B20 1810C4 +051AG
 
 ### Family B2: -0.5 °C Temperature Offset at 0 °C
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
@@ -135,7 +126,11 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
-- Example topmark: DALLAS DS18B20 1626C4 +233AA
+- Example topmark: DALLAS 18B20 1626C4 +233AA
+- Example topmark: DALLAS 18B20 1702C4 +233AA
+- Example topmark: DALLAS 18B20 1810C4 +138AB
+- Example topmark: DALLAS 18B20 1829C4 +887AB
+- Example topmark: DALLAS 18B20 1908C4 +887AB
 
 ### Family C1: Incomplete Work
 *Summary based on web searches \[11\].*
@@ -148,7 +143,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 - Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
-- Example topmark: DALLAS DS18B20 1722C4 +158AC
+- Example topmark: DALLAS 18B20 1722C4 +158AC
 
 ### Family C2: Small Offset at 0 °C
 * ROM patterns \[5\]: 28-FF-64-ss-ss-tt-tt-crc
@@ -162,7 +157,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
-- Example topmark: DALLAS DS18B20 1810C4 +158AC
+- Example topmark: DALLAS 18B20 1331C4 +826AC
+- Example topmark: DALLAS 18B20 1810C4 +158AC
 
 ### Family D1: Noisy Rubbish with Supercap
 * ROM patterns \[5\]: 28-tt-tt-77-91-ss-ss-crc and 28-tt-tt-46-92-ss-ss-crc
@@ -185,7 +181,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-B8-0E-77 **-91-** 0E-02-D7
 - Example ROM: 28-21-6D-46 **-92-** 0A-02-B7
 - Initial Scratchpad: 90/01/55/05/7F/7E/81/66/27
-- Example topmark: DALLAS DS18B20 1827C4 +051AG
+- Example topmark: DALLAS 18B20 1807C4 +051AG
+- Example topmark: DALLAS 18B20 1827C4 +051AG
 
 ### Family D2: Noisy Rubbish
 * ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc
@@ -204,7 +201,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-FB-10-79 **-A2-** 00-03-88
 - Example ROM: 28-29-7D-16 **-A8-** 01-3C-84
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
-- Example topmark: DALLAS DS18B20 1827C4 +051AG
+- Example topmark: DALLAS 18B20 1812C4 +051AG
+- Example topmark: DALLAS 18B20 1827C4 +051AG
+- Example topmark: DALLAS 18B20 1916C4 +051AG
 
 ### Family E: Incomplete Work
 *Summary based on web searches \[7\].*
