@@ -170,15 +170,17 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
 	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB, 0xDD (5 bytes), 0xEE (5 bytes) \[5\], or
 	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB \[5\].
-* First byte following undocumented function code 0x8B is ``0x06`` \[5\].
+* First byte following undocumented function code 0x8B is \[5\]
+	+ ``0x06``: Sensors **do not work with Parasitic Power**. Sensors leave data line floating when powered parasitically \[5\].
+	+ ``0x02``: Sensors do work in parasitic power mode (and report correctly whether they are parasitically powered).
 * It is possible to send arbitrary content for ROM code and for bytes 5, 6, and 7 of the status register after undocumented function codes 0xA3 and 0x66, respectively \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Very noisy data \[5\].
-* Sensors **do not work with Parasitic Power**. Sensors leave data line floating when powered parasitically \[5\].
 * Polling after function code 0x44 indicates approx. 11 ms (eleven) for conversion regardless of measurement resolution \[5\].
 * Chips **contain a supercap rather than an EEPROM** to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
 	+ The supercap retains memory for several minutes unless Vcc is pulled to GND, in which case memory retention is 5 to 30 seconds \[5\].
 * Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
+- Example ROM: 28-48-1B-77 **-91-** 17-02-55  (working parasitic power mode)
 - Example ROM: 28-24-1D-77 **-91-** 04-02-CE  (responds to 0xDD and 0xEE)
 - Example ROM: 28-B8-0E-77 **-91-** 0E-02-D7
 - Example ROM: 28-21-6D-46 **-92-** 0A-02-B7
@@ -192,8 +194,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB, 0xDD (3 bytes), 0xEE (3 bytes) \[5\], or
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB \[5\].
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
-* Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
 * Sensors **do not work with Parasitic Power**. Sensors draw data line low while powered parasitically \[5\].
+* Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
