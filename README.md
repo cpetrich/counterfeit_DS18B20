@@ -1,15 +1,17 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 1 December 2019.
+> Author: Chris Petrich, 2 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
 ## Why should I care?
 Besides ethical concerns, some of the counterfeit sensors actually do not contain an EEPROM, do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
-## Are they clones?
-IMHO, they are not clones, they are counterfeits (fakes). They are not clones because, as of writing (2019), all counterfeits behave differently electrically from the authentic Maxim products and can be distinguished easily from the originals. The manufacturers of the counterfeits have not attempted to disguise their counterfeit nature electrically, and even use topmarks with production date--batch code combinations different from the ones used by Maxim. However, I consider them counterfeits because their topmarks wrongly implies they were produced by ``Dallas`` (i.e., a shorthand for a company bought by Maxim).
+## What are we dealing with?
+A **counterfeit** is a part that is substantially indistinguishable from a genuie part. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are reproductions of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No "P" marked in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different than known authentic parts? Probably a counterfeit.
+
+In addition, I have seen indication (N=2) that apparently genuie DS18B20 are being sold by non-authorized distributors that have flawed cases (pits or chips). Suppose those qualify as manufacturing rejects rather than fakes. However, I've seen too few of those to be sure.
 
 ## What do they look like?
 ![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB](images/Maxim_DS18B20_chip.jpg)
