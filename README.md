@@ -131,6 +131,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1702C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +138AB
 - Example topmark: DALLAS 18B20 1829C4 +887AB
+- Example topmark: DALLAS 18B20 1832C4 +827AH
 - Example topmark: DALLAS 18B20 1908C4 +887AB
 
 ### Family C1: Incomplete Work
