@@ -12,7 +12,7 @@ Besides ethical concerns, some of the counterfeit sensors actually do not contai
 A **counterfeit** is a part that is substantially indistinguishable from a genuie part. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are reproductions of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No "P" marked in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different than known authentic parts? Probably a counterfeit.
 
 ## What do they look like?
-![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB](images/Maxim_DS18B20_chip.jpg)
+![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked P](images/Maxim_DS18B20_chip_front_reverse.jpg)
 
 Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 case. 
 * As of writing (2019), the topmark of original Maxim chips is lasered rather than printed. 
