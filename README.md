@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 4 December 2019.
+> Author: Chris Petrich, 9 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -19,8 +19,12 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer),
 * the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
 * The 3rd row specifies production year and week number of the year (in this case, week 32 of 2019), and 
-* the last two characters in row 3 specify the revision of the die (``C4`` since at least late 2011). 
-* In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. From what I can tell, for a given character combination the number in the batch code changes (usually increases) as the date code increases albeit in non-obvious increments. Since 2016, I've only come across character combinations ``AB`` and ``AC``. In earlier chips I've seen ``AD`` and ``AI``.
+* the last two characters in row 3 specify the revision of the die (``C4`` since at least fall 2011). 
+* In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. 
+	+ In chips produced 2016 or later I've only come across character combinations ``AB`` and ``AC``.
+* The marking on the indent on the rear of the case is
+	+ ``P`` (Philippines?) in all recent chips (2016 and younger), and all or some chips going back at least as far as 2011.
+	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``O``, ``S``, ``L``, ``N``, ``V``, ``I``, and possibly others, at least in some chips produced around 2011.
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
