@@ -72,7 +72,7 @@ Alternatively,
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\]. Based on my experience, a sensor that will fail any of the three software tests will fail all of them.
 
 ## What families of DS18B20-like chips can I expect to encounter?
-Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 4 other companies (Families B, C, D, and E) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\].
+Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 4 other companies (Families B, C, D, and E) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [7Q Technology](http://www.7qtek.com).
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
 
@@ -103,9 +103,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
-* Write scratchpad-bug (0x4E) \[5\]:
-	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
-	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+* DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
+	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
+	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Temperature offset as shown on the datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
@@ -120,10 +120,9 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 ### Family B2: -0.5 °C Temperature Offset at 0 °C
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
-* Write scratchpad-bug (0x4E) \[5\]:
-	- If 3 data bytes are sent (TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
-	- 5 data bytes can be sent with function code 0x4E, where the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
-``<byte 7>``, respectively.
+* DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
+	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
+	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
@@ -247,3 +246,4 @@ The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up 
 9. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet 043001, Dallas Semiconductor, 20pp.
 10. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Preliminary Datasheet 050400, Dallas Semiconductor, 27pp.
 11. Piecemeal from various blogs and posts.
+12. [QT18B20](http://www.leoniv.diod.club/articles/ds18x20/downloads/qt18b20.pdf) "QT18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet Rev 061713, 7Q Technology.
