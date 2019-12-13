@@ -19,7 +19,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer),
 * the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
 * The 3rd row specifies production year and week number of the year (in this case, week 32 of 2019), and 
-* the last two characters in row 3 specify the revision of the die (``C4`` since at least fall 2011). 
+* the last two characters in row 3 specify the revision of the die (currently ``C4``). 
 * In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. 
 	+ In chips produced 2016 or later I've only come across character combinations ``AB`` and ``AC`` \[5\].
 * The marking inside the indent on the rear of the case is
@@ -29,7 +29,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
-Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least some time in 2011 \[5\]) \[5\].
+Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least some time in 2011 \[5\], or more likely since 2006) \[5\].
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
