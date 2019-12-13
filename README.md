@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 500 "waterproof" probes from two dozen sellers on ebay. All of them contained counterfeit DS18B20 sensors. Also, almost all sensors we bought on ebay were counterfeit.
 
-> Author: Chris Petrich, 11 December 2019.
+> Author: Chris Petrich, 13 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -34,13 +34,13 @@ Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
 * Family C: the sensor is fixed in 12-bit mode (i.e., byte 4 of the scratchpad register is always ``0x7f``)
-* Family C2: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
+* Family C: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
 * Family B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
 * Family D: sensor does not respond in parasitic mode (applies to most sensors of Family D)
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
 * Family D: sensor does not perform low-resolution temperature conversions faster
-* Family D, E: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
-* Family D1, E: does not have an EEPROM
+* Family D: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
+* Family D1: retains temperature measurements during power cycles
 
 Hence, as of writing (2019), every fake sensor available does not comply with the datasheet in at least one way.
 
@@ -51,7 +51,7 @@ Regarding (II), there are simple tests for differences with Maxim-produced DS18B
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D1
-* 28-30 ms: Family C2
+* 28-30 ms: Family C
 * 460-525 ms: Family D2
 * 580-615 ms: Family A
 * 585-730 ms: Family B
@@ -72,15 +72,14 @@ Alternatively,
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\]. Based on my experience, a sensor that will fail any of the three software tests will fail all of them.
 
 ## What families of DS18B20-like chips can I expect to encounter?
-Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 4 other companies (Families B, C, D, and E) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [7Q Technology](http://www.7qtek.com).
+Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 3 other companies in 2019 (Families B, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [7Q Technology](http://www.7qtek.com).
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
-
-Around 2017/18 chip production seems to have shifted from Family C1 to C2 and from Family D1 to D2, i.e. future observation of chips of Families C1 and D1 in the wild should get increasingly rare \[5\]. In contrast, chips of both Families B1 and B2 are currently in active circulation (2019). By extension, there could be additional, older groups of counterfeit DS18B20 that are not listed here.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
 ### Family A: Authentic Maxim DS18B20
+***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from a few vendors in 2019***
 * ROM pattern \[5\]: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all successful temperature conversions, and ``0x00 < <byte 6> <= 0x10`` \[2,3,5\].
 * According to current behavior \[5\] and early datasheets \[9\], the power-up state of reserved ``<byte 6>`` in the Scratchpad register is ``0x0c``.
@@ -98,7 +97,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS DS18B20 1932C4 +786AB
 
-### Family B1: Matches Datasheet Temperature Offset Curve
+### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
+***Obtained probes from a number of vendors but no individual chips in 2019***
 * ROM patterns \[5\]:
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
@@ -117,7 +117,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +051AG
 
-### Family B2: -0.5 °C Temperature Offset at 0 °C
+### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
+***Obtained both probes and chips of this series from a number of vendors in 2019***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
@@ -138,20 +139,8 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1908C4 +887AB
 - Example topmark: 7Q-Tek 18B20 1861C02
 
-### Family C1: Incomplete Work
-*Summary based on web searches \[11\].*
-
-* ROM patterns \[5\]: 28-61-64-ss-ss-tt-tt-crc
-* Scratchpad register ``<byte 6> == 0xff``, ``<byte 7> == 0xff``.
-* Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always).
-* Does not work in parasitic power mode.
-* Default alarm register settings differ from Family A (``0xff`` and ``0xff``).
-
-- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
-- Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
-- Example topmark: DALLAS 18B20 1722C4 +158AC
-
-### Family C2: Small Offset at 0 °C
+### Family C: Small Offset at 0 °C
+***Obtained no probes but obtained chips from a few vendors in 2019***
 * ROM patterns \[5\]: 28-FF-64-ss-ss-tt-tt-crc
 * Scratchpad register ``<byte 6> == 0x0c`` \[5\].
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
@@ -167,6 +156,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1810C4 +158AC
 
 ### Family D1: Noisy Rubbish with Supercap
+***Obatined probes from two vendors in early 2019, obtained chips from one vendor in 2019***
 * ROM patterns \[5\]: 28-tt-tt-77-91-ss-ss-crc and 28-tt-tt-46-92-ss-ss-crc
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
@@ -191,6 +181,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 
 ### Family D2: Noisy Rubbish
+***Obtained both probes and chips from a large number of vendors in 2019***
 * ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
@@ -212,26 +203,24 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example topmark: DALLAS 18B20 1916C4 +051AG
 - Example topmark: DALLAS 18B20 1923C4 +051AG
 
-### Family E: Incomplete Work
-*Summary based on web searches \[7\].*
-
+### Obsolete as of 2019
+***Obtained neither probes nor chips in 2019***
 * ROM patterns \[5,7\]: 28-tt-tt-ss-00-00-80-crc
-* Scratchpad register ``<byte 7> == 0xff``, ``<byte 6> == 0xff`` \[5,7\].
-* Default alarm register settings differ from Family A (``0xff`` and ``0xff``).
-* Contains no EEPROM \[7\].
-
-- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
-- Initial Scratchpad: xx/xx/FF/FF/7F/FF/FF/FF/xx
-- Example topmark: DALLAS 18B20 1742C4 +760AA
+	- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
+* ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
+	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 
 ## MAX31820
-The MAX31820 appears to be a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
+The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
+
+## 7Q-Tek QT18B20
+The QT18B20 is a DS18B20 clone developed and sold by Beijing 7Q Technology Inc (Family B). The datasheet of the QT18B20 emphasizes the addition of two user-defined bytes in the scratchpad register \[12\]. Unlike the data sheet of the DS18B20, it does not state that the ROM code is lasered. A large number of these chips bear fake DS18B20 topmarks.
 
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
 
 
-(*Information on chips of Families A, B, C2, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Information on chips of Families C1 and E comes from web searches \[7,11\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
+(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
 
 ## References
 
