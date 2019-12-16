@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 13 December 2019.
+> Author: Chris Petrich, 16 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -29,7 +29,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
-Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least some time in 2011 \[5\], or more likely since 2006) \[5\].
+Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` most likely since 2006 (definitely since 2011 \[5\])) \[5\].
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
@@ -96,6 +96,50 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS DS18B20 1932C4 +786AB
+- Indent mark: P (date codes 1150 and newer)
+
+### Family A-Fishy1: Stolen?
+***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
+
+*If I were to make a wild guess I would say these chips were diverted somewhere toward the end of the Maxim production pipeline (stolen?) \[5\].* These chips are marked as produced in Thailand rather than Philippines.
+
+* ROM pattern \[5\]: 28-tt-tt-Cs-03-00-00-crc
+
+The chips follow the description of Family A above with the following exceptions \[5\]:
+* Both alarm registers are set to 0x00 (scratchpad bytes 2 and 3).
+* The conversion resolution is set to 9 bits (i.e., both configuartion bits are 0).
+* Both trim values are 0x00, resulting in wrong temperatures (i.e., very low) and conversion times in the range of 400 to 500 ms.
+	+ Once trim values are set to something reasonable, the time for temperature conversion is within the range specified for Family A above.
+
+- Example ROM: 28-9B-9E-CB-03 **-00-00-** 1F
+- Initial Scratchpad: **50**/**05**/00/00/**1F**/**FF**/0C/**10**/74
+- Example topmark: DALLAS DS18B20 1136C4 +957AE
+- Example topmark: DALLAS DS18B20 1136C4 +957AF
+- Example topmark: DALLAS DS18B20 1136C4 +152AE
+- Example topmark: DALLAS DS18B20 1136C4 +152AF
+- Example topmark: DALLAS DS18B20 1136C4 +152AG
+- Example topmark: DALLAS DS18B20 1136C4 +152AI
+- Indent mark: THAI <letter>
+
+### Family A-Fishy2: Stolen?
+***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
+
+*If I were to make a wild guess I would say the dies predate ``C4`` and that either the dies themselves were diverted or the masks to produce the dies were stolen \[5\].*
+
+* ROM pattern \[5\]: 28-00-ss-00-tt-tt-tt-crc, 28-ss-00-ss-tt-tt-tt-crc, 28-ss-00-00-tt-tt-00-crc
+
+The chips follow the description of Family A above with the following exceptions \[5\]:
+* The ROM pattern is incompatible with what Maxim produces.
+* The Trim2 value is ``0xFB`` or ``0xFC``, i.e. incompatible with a known \[5\] Maxim production suggested by the date code.
+* The time for temperature conversion spans a remarkably wide range from 325 to 502 ms. This range remains wide and outside the bounds of Family A specified above even when applying more recent trim settings.
+* Alarm settings (i.e., scratchpad bytes 2 and 3) have seemingly random content.
+* *Some* chips retain their scratchpad content across a 100 ms power cycle.
+* One specimen tested did not function properly in parasitic mode.
+* The topmark is printed rather than lasered, and there is no mark in the indent.
+
+- Example ROM: 28-19-00-00-B7-5B-00-41
+- Initial Scratchpad: **50**/**05**/xx/xx/**7F**/**FF**/0C/**10**/xx
+- Example topmark: DALLAS DS18B20 1808C4 +233AA
 
 ### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
 ***Obtained probes from a number of vendors but no individual chips in 2019***
