@@ -161,6 +161,7 @@ The chips follow the description of Family A above with the following exceptions
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +051AG
+- Indent mark: *none*
 
 ### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
 ***Obtained both probes and chips of this series from a number of vendors in 2019. Two vendors sent chips marked 7Q-Tek.***
@@ -183,6 +184,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1832C4 +827AH
 - Example topmark: DALLAS 18B20 1908C4 +887AB
 - Example topmark: 7Q-Tek 18B20 1861C02
+- Indent mark: *none*
 
 ### Family C: Small Offset at 0 °C
 ***Obtained no probes but obtained chips from a few vendors in 2019***
@@ -199,6 +201,7 @@ The chips follow the description of Family A above with the following exceptions
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
 - Example topmark: DALLAS 18B20 1331C4 +826AC
 - Example topmark: DALLAS 18B20 1810C4 +158AC
+- Indent mark: *none*
 
 ### Family D1: Noisy Rubbish with Supercap
 ***Obatined probes from two vendors in early 2019, obtained chips from one vendor in 2019***
@@ -224,6 +227,7 @@ The chips follow the description of Family A above with the following exceptions
 - Initial Scratchpad: 90/01/55/05/7F/7E/81/66/27
 - Example topmark: DALLAS 18B20 1807C4 +051AG
 - Example topmark: DALLAS 18B20 1827C4 +051AG
+- Indent mark: *none*
 
 ### Family D2: Noisy Rubbish
 ***Obtained both probes and chips from a large number of vendors in 2019***
@@ -247,6 +251,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Example topmark: DALLAS 18B20 1916C4 +051AG
 - Example topmark: DALLAS 18B20 1923C4 +051AG
+- Indent mark: *none*
 
 ### Obsolete as of 2019
 ***Obtained neither probes nor chips in 2019***
@@ -255,11 +260,11 @@ The chips follow the description of Family A above with the following exceptions
 * ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 
-## MAX31820
-The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
-
 ## 7Q-Tek QT18B20
 The QT18B20 is a DS18B20 clone developed and sold by Beijing 7Q Technology Inc (Family B). The datasheet of the QT18B20 emphasizes the addition of two user-defined bytes in the scratchpad register \[12\]. Unlike the data sheet of the DS18B20, it does not state that the ROM code is lasered. A large number of these chips bear fake DS18B20 topmarks.
+
+## MAX31820
+The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
 
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
