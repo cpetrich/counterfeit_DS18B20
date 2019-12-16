@@ -9,7 +9,7 @@
 Besides ethical concerns, some of the counterfeit sensors actually do not contain an EEPROM, do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
 ## What are we dealing with?
-A **counterfeit** is a part that is substantially indistinguishable from a genuie part. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are reproductions of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No "P" marked in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different than known authentic parts? Probably a counterfeit.
+A **counterfeit** is a part that is substantially indistinguishable from a genuie part. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are reproductions of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different than known authentic parts? Probably a counterfeit.
 
 ## What do they look like?
 ![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked P](images/Maxim_DS18B20_chip_front_reverse.jpg)
@@ -96,7 +96,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS DS18B20 1932C4 +786AB
-- Indent mark: P (date codes 1150 and newer)
+- Indent mark: ``P`` (date codes 1150 and newer)
 
 ### Family A-Fishy1: Stolen?
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
@@ -119,7 +119,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS DS18B20 1136C4 +152AF
 - Example topmark: DALLAS DS18B20 1136C4 +152AG
 - Example topmark: DALLAS DS18B20 1136C4 +152AI
-- Indent mark: THAI <letter>
+- Indent mark: ``THAI <letter>``
 
 ### Family A-Fishy2: Stolen?
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
@@ -140,7 +140,8 @@ The chips follow the description of Family A above with the following exceptions
 - Example ROM: 28-19-00-00-B7-5B-00-41
 - Initial Scratchpad: **50**/**05**/xx/xx/**7F**/**FF**/0C/**10**/xx
 - Example topmark: DALLAS DS18B20 1808C4 +233AA
-
+- Indent mark: *none*
+	
 ### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
 ***Obtained probes from a number of vendors but no individual chips in 2019***
 * ROM patterns \[5\]:
@@ -162,7 +163,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1810C4 +051AG
 
 ### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
-***Obtained both probes and chips of this series from a number of vendors in 2019***
+***Obtained both probes and chips of this series from a number of vendors in 2019. Two vendors sent chips marked 7Q-Tek.***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
