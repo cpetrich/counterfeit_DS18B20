@@ -1,15 +1,15 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 16 December 2019.
+> Author: Chris Petrich, 21 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
 ## Why should I care?
-Besides ethical concerns, some of the counterfeit sensors actually do not contain an EEPROM, do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
+Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
 ## What are we dealing with?
-A **counterfeit** is a part that is substantially indistinguishable from a genuie part. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are reproductions of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different than known authentic parts? Probably a counterfeit.
+Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized copy, imitation, substitute, or modification misrepresented as a specific genuie item from an authorized manufacturer \[13\]. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are copies of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different from known authentic parts? Probably a counterfeit.
 
 ## What do they look like?
 ![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked P](images/Maxim_DS18B20_chip_front_reverse.jpg)
@@ -143,7 +143,7 @@ The chips follow the description of Family A above with the following exceptions
 - Indent mark: *none*
 	
 ### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
-***Obtained probes from a number of vendors but no individual chips in 2019***
+***Obtained probes from a number of vendors in 2019, obtained chips from one vendor in 2019***
 * ROM patterns \[5\]:
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
@@ -164,7 +164,7 @@ The chips follow the description of Family A above with the following exceptions
 - Indent mark: *none*
 
 ### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
-***Obtained both probes and chips of this series from a number of vendors in 2019. Two vendors sent chips marked 7Q-Tek.***
+***Obtained both probes and chips of this series from a number of vendors in 2019. Two vendors sent chips marked 7Q-Tek rather than DALLAS***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
@@ -286,3 +286,4 @@ The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) a
 10. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Preliminary Datasheet 050400, Dallas Semiconductor, 27pp.
 11. Piecemeal from various blogs and posts.
 12. [QT18B20](http://www.leoniv.diod.club/articles/ds18x20/downloads/qt18b20.pdf) "QT18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet Rev 061713, 7Q Technology.
+13. [AIR6273](https://www.sae.org/standards/content/air6273/) "Terms, Definitions, and Acronyms Counterfeit Materiel or Electrical, Electronic, and Electromechanical Parts", SAE Aerospace Information Report, July 2019.
