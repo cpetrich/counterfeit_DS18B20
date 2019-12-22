@@ -1,18 +1,18 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 21 December 2019.
+> Author: Chris Petrich, 22 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
 ## Why should I care?
-Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level or temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
+Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level, temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
 ## What are we dealing with?
-Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized copy, imitation, substitute, or modification misrepresented as a specific genuie item from an authorized manufacturer \[13\]. There are reports of transistors being marked and sold as DS18B20 (I haven't come across those), those are counterfeits that are of course trivial to detect electrically. Then there are **clones** which are copies of DS18B20 by unauthorized manufacturers. Clones look and act like authentic parts to a degree that many users would not notice that they are not authentic. The world of ebay, aliexpress, and big and small unauthorized retailers is swamped with those. Those are the counterfeits (fakes) covered here. Fortunately, as far as DS18B20 are concerned, they are nearly trivially easy to identify once you know what to look for. Device marking printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Any disagreement with behavior specified in the datasheet? Probably a counterfeit. Behaves systematically different from known authentic parts? Probably a counterfeit.
+Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized copy, imitation, substitute, or modification misrepresented as a specific genuie item from an authorized manufacturer \[13\]. As of 2019, the main problem is imitations (**clones**) that are labeled to mislead the unsuspecting buyer. Fortunately, DS18B20 clones are nearly trivially easy to identify: Marking on the chip printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Content of the "scratchpad register" doesn't comply with the datasheet? Probably a counterfeit. Behaves systematically different from known authentic chips? Probably a counterfeit.
 
 ## What do they look like?
-![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked P](images/Maxim_DS18B20_chip_front_reverse.jpg)
+![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked "P"](images/Maxim_DS18B20_chip_front_reverse.jpg)
 
 Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 case. 
 * As of writing (2019), the topmark of original Maxim chips is lasered rather than printed. 
@@ -25,6 +25,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The marking inside the indent on the rear of the case is
 	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on all or some chips going back at least as far as 2011 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``L``, ``N``, ``O``, ``S``, ``V``, and possibly others, at least on some chips produced around 2011 \[5\].
+* From what I've seen, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``Thai`` in the indent \[5\].
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
@@ -45,7 +46,7 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 Hence, as of writing (2019), every fake sensor available does not comply with the datasheet in at least one way.
 
 Regarding (II), there are simple tests for differences with Maxim-produced DS18B20 sensors (``C4`` die) that apparently *all* counterfeit sensors fail \[5\]. The most straight-forward software tests are probably these:
-1. It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (Maxim's ROM is essentially a mostly chronological serial number (mostly, but not strictly when compared with the date code on the case) \[5\].)
+1. It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (Maxim's ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
 2. It is a fake if ``<byte 6> == 0`` or ``<byte 6> > 0x10`` in the scratchpad register, or if the following scratchpad register relationship applies after **any** *successful* temperature conversion: ``(<byte 0> + <byte 6>) & 0x0f != 0`` (*12-bit mode*) \[3,5\].
 3. It is a fake if the chip returns data to simple queries of undocumented function codes other than 0x68 and 0x93 \[4,5\]. (*As of writing (2019), this can actually be simplified to: it is a fake if the return value to sending code 0x68 is ``0xff`` \[5\].*)
 
@@ -72,9 +73,9 @@ Alternatively,
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\]. Based on my experience, a sensor that will fail any of the three software tests will fail all of them.
 
 ## What families of DS18B20-like chips can I expect to encounter?
-Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 3 other companies in 2019 (Families B, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [7Q Technology](http://www.7qtek.com).
+Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 3 other companies in 2019 (Families B, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [Beijing 7Q Technology](http://www.7qtek.com).
 
-In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1 (i.e., seems ok at first glance, but this is not an endorsement), while one in three purchases had sensors of Family D (i.e., garbage for our purposes). None had sensors of Family A. Neither origin nor price were indicators of sensor Family.
+In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families C or A.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
