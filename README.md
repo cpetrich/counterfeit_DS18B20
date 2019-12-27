@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 22 December 2019.
+> Author: Chris Petrich, 28 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -23,14 +23,14 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. 
 	+ In chips produced 2016 or later I've only come across character combinations ``AB`` and ``AC`` \[5\].
 * The marking inside the indent on the rear of the case is
-	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on all or some chips going back at least as far as 2011 \[5\].
+	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on most(?) chips going back at least as far as 2009 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``L``, ``N``, ``O``, ``S``, ``V``, and possibly others, at least on some chips produced around 2011 \[5\].
 * From what I've seen, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``Thai`` in the indent \[5\].
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
-Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` most likely since 2006 (definitely since 2011 \[5\])) \[5\].
+Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` most likely since 2006 (definitely since 2009 \[5\])) \[5\].
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
@@ -84,7 +84,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 * ROM pattern \[5\]: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all successful temperature conversions, and ``0x00 < <byte 6> <= 0x10`` \[2,3,5\].
 * According to current behavior \[5\] and early datasheets \[9\], the power-up state of reserved ``<byte 6>`` in the Scratchpad register is ``0x0c``.
-* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2011, and has been 0x74 since the fall of 2016 (all with ``C4`` die) \[5\].
+* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2009, and has been 0x74 since the fall of 2016 (all with ``C4`` die) \[5\].
 	+ Trim1 and Trim2 encode two parameters \[5\]. Let the bit pattern of Trim1 be ``[t17, t16, t15, t14, t13, t12, t11, t10]`` (MSB to LSB) and Trim2 be ``[t27, t26, t25, t24, t23, t22, t21, t20]``. Then,
 		- offset parameter = ``[t22, t21, t20, t10, t11, t12, t13, t14, t15, t16, t17]`` (unsigned 11 bit-value) \[5\], and
 		- curve parameter = ``[t27, t26, t25, t24, t23]`` (unsigned 5 bit-value) \[5\].
@@ -125,13 +125,13 @@ The chips follow the description of Family A above with the following exceptions
 ### Family A-Fishy2: Stolen?
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
 
-*If I were to make a wild guess I would say the dies predate ``C4`` and that either the dies themselves were diverted or the masks to produce the dies were stolen \[5\].*
+*If I were to make a wild guess I would say the dies predate ``C4`` and that either the dies themselves were diverted or the masks used to produce the dies were stolen \[5\].*
 
 * ROM pattern \[5\]: 28-00-ss-00-tt-tt-tt-crc, 28-ss-00-ss-tt-tt-tt-crc, 28-ss-00-00-tt-tt-00-crc
 
 The chips follow the description of Family A above with the following exceptions \[5\]:
 * The ROM pattern is incompatible with what Maxim produces.
-* The Trim2 value is ``0xFB`` or ``0xFC``, i.e. incompatible with a known \[5\] Maxim production suggested by the date code.
+* The Trim2 value is ``0xFB`` or ``0xFC``, i.e. incompatible with a known \[5\] Maxim production suggested by the date code. (Note that this means the curve parameter is 0x1f, i.e. the highest value possible \[5\]. Also, the offset parameter spreads over 200 units rather than a range typical for Family A, see above \[5\].)
 * The time for temperature conversion spans a remarkably wide range from 325 to 502 ms. This range remains wide and outside the bounds of Family A specified above even when applying more recent trim settings.
 * Alarm settings (i.e., scratchpad bytes 2 and 3) have seemingly random content.
 * *Some* chips retain their scratchpad content across a 100 ms power cycle.
