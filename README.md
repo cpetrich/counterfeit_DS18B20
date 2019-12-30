@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 28 December 2019.
+> Author: Chris Petrich, 30 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -252,6 +252,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Example topmark: DALLAS 18B20 1916C4 +051AG
 - Example topmark: DALLAS 18B20 1923C4 +051AG
+- Example topmark: DALLAS 18B20 1828C4 +233AA
 - Indent mark: *none*
 
 ### Obsolete as of 2019
