@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 30 December 2019.
+> Author: Chris Petrich, 31 December 2019.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -165,7 +165,7 @@ The chips follow the description of Family A above with the following exceptions
 - Indent mark: *none*
 
 ### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
-***Obtained both probes and chips of this series from a number of vendors in 2019. Two vendors sent chips marked 7Q-Tek rather than DALLAS***
+***Obtained both probes and chips of this series from a number of vendors in 2019. Three vendors sent chips marked 7Q-Tek rather than DALLAS***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
@@ -184,6 +184,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1829C4 +887AB
 - Example topmark: DALLAS 18B20 1832C4 +827AH
 - Example topmark: DALLAS 18B20 1908C4 +887AB
+- Example topmark: DALLAS 18B20 1912C4 +001AC (*NB: this date/batch combination is also used on genuie chips \[5\]*)
 - Example topmark: 7Q-Tek 18B20 1861C02
 - Indent mark: *none*
 
@@ -272,7 +273,7 @@ The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) a
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended (and currently sufficient) way of identifying counterfeit sensors is to analyze state and behavior of the scratchpad register in response to commands that comply with the datasheet \[5\].
 
 
-(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. Tests were performed at 5 V with 1.2 kOhm pull-up.*)
+(*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. All tests were performed at 5 V with 1.2 kOhm pull-up.*)
 
 ## References
 
