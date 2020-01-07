@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 31 December 2019.
+> Author: Chris Petrich, 7 January 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -96,7 +96,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
-- Example topmark: DALLAS DS18B20 1932C4 +786AB
+- Example topmark: DALLAS 18B20 1932C4 +786AB
 - Indent mark: ``P`` (date codes 1150 and newer)
 
 ### Family A-Fishy1: Stolen?
@@ -114,12 +114,12 @@ The chips follow the description of Family A above with the following exceptions
 
 - Example ROM: 28-9B-9E-CB-03 **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/00/00/**1F**/**FF**/0C/**10**/74
-- Example topmark: DALLAS DS18B20 1136C4 +957AE
-- Example topmark: DALLAS DS18B20 1136C4 +957AF
-- Example topmark: DALLAS DS18B20 1136C4 +152AE
-- Example topmark: DALLAS DS18B20 1136C4 +152AF
-- Example topmark: DALLAS DS18B20 1136C4 +152AG
-- Example topmark: DALLAS DS18B20 1136C4 +152AI
+- Example topmark: DALLAS 18B20 1136C4 +957AE
+- Example topmark: DALLAS 18B20 1136C4 +957AF
+- Example topmark: DALLAS 18B20 1136C4 +152AE
+- Example topmark: DALLAS 18B20 1136C4 +152AF
+- Example topmark: DALLAS 18B20 1136C4 +152AG
+- Example topmark: DALLAS 18B20 1136C4 +152AI
 - Indent mark: ``THAI <letter>``
 
 ### Family A-Fishy2: Stolen?
@@ -140,7 +140,7 @@ The chips follow the description of Family A above with the following exceptions
 
 - Example ROM: 28-19-00-00-B7-5B-00-41
 - Initial Scratchpad: **50**/**05**/xx/xx/**7F**/**FF**/0C/**10**/xx
-- Example topmark: DALLAS DS18B20 1808C4 +233AA
+- Example topmark: DALLAS 18B20 1808C4 +233AA
 - Indent mark: *none*
 	
 ### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
