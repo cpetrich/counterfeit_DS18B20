@@ -36,6 +36,7 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
 * Family C: the sensor is fixed in 12-bit mode (i.e., byte 4 of the scratchpad register is always ``0x7f``)
 * Family C: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
+* Family B1, D1: ROM can be changed in software, i.e. it is not lasered
 * Family B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
 * Family D: sensor does not respond in parasitic mode (applies to most sensors of Family D)
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
