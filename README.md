@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 7 January 2020.
+> Author: Chris Petrich, 15 January 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -144,17 +144,17 @@ The chips follow the description of Family A above with the following exceptions
 - Indent mark: *none*
 	
 ### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
-***Obtained probes from a number of vendors in 2019, obtained chips from one vendor in 2019***
+***Obtained probes from a number of vendors in 2019, obtained chips from two vendors in 2019. One vendor sent chips marked UMW rather than DALLAS***
 * ROM patterns \[5\]:
 	- 28-AA-tt-ss-ss-ss-ss-crc
 	- 28-tt-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
-* DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
+* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
+* DS18B20 write scratchpad-bug (0x4E) / QT18B20 & UMW scratchpad \[5,12,14\]:
 	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
-	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+	- if 5 data bytes are sent (as per QT18B20 and UMW datsheets, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
-* ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\].
-* Temperature offset as shown on the datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
+* ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. (The UMW datasheet states that the ROM code can be changed but does not state how \[14\].)
+* Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
@@ -162,12 +162,13 @@ The chips follow the description of Family A above with the following exceptions
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +051AG
+- Example topmark: UMW 18B20 1935C4
 - Indent mark: *none*
 
 ### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
 ***Obtained both probes and chips of this series from a number of vendors in 2019. Three vendors sent chips marked 7Q-Tek rather than DALLAS***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
-* Scratchpad register ``<byte 6>`` is constant (default ``0x0c``) \[5\].
+* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / QT18B20 scratchpad \[5,12\]:
 	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
 	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
@@ -290,3 +291,4 @@ The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) a
 11. Piecemeal from various blogs and posts.
 12. [QT18B20](http://www.leoniv.diod.club/articles/ds18x20/downloads/qt18b20.pdf) "QT18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet Rev 061713, 7Q Technology.
 13. [AIR6273](https://www.sae.org/standards/content/air6273/) "Terms, Definitions, and Acronyms Counterfeit Materiel or Electrical, Electronic, and Electromechanical Parts", SAE Aerospace Information Report, July 2019.
+14. [UMW DS18B20](https://datasheet.lcsc.com/szlcsc/1911131832_Youtai-Semiconductor-Co-Ltd-DS18B20_C376006.pdf) UMW DS18B20 datasheet.
