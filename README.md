@@ -74,9 +74,9 @@ Alternatively,
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\]. Based on my experience, a sensor that will fail any of the three software tests will fail all of them.
 
 ## What families of DS18B20-like chips can I expect to encounter?
-Besides the DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), similar circuits seem to be produced independently by at least 3 other companies in 2019 (Families B, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B seem to be produced by [Beijing 7Q Technology](http://www.7qtek.com).
+In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A, below), there are clones produced independently by at least 4 other companies as of 2019 (Families B1, B2, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2.
 
-In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families C or A.
+In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families C or A.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
@@ -144,30 +144,31 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1808C4 +233AA
 - Indent mark: *none*
 	
-### Family B1: QT18B20 Matching Datasheet Temperature Offset Curve
+### Family B1: GXCAS 18B20, Matching Datasheet Temperature Offset Curve
 ***Obtained probes from a number of vendors in 2019, obtained chips from two vendors in 2019. One vendor sent chips marked UMW rather than DALLAS***
 * ROM patterns \[5\]:
-	- 28-AA-tt-ss-ss-ss-ss-crc
-	- 28-tt-tt-ss-ss-ss-ss-crc
+	- 28-AA-tt-ss-ss-ss-ss-crc (GXCAS-calibrated?)
+	- 28-tt-tt-ss-ss-ss-ss-crc (UMW-calibrated?)
 * Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
-* DS18B20 write scratchpad-bug (0x4E) / QT18B20 & UMW scratchpad \[5,12,14\]:
+* DS18B20 write scratchpad-bug (0x4E) / UMW scratchpad \[5,12,14\]:
 	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
-	- if 5 data bytes are sent (as per QT18B20 and UMW datsheets, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
+	- if 5 data bytes are sent (as per UMW datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. (The UMW datasheet states that the ROM code can be changed but does not state how \[14\].)
 * Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* The die has "GXCAS" written on it.
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +051AG
-- Example topmark: [GXCAS](http://galaxy-cas.com/) 18B20E 1847D02
-- Example topmark: [UMW](http://umw-ic.com/) 18B20 1935C4
+- Example topmark: GXCAS 18B20E 1847D02
+- Example topmark: UMW 18B20 1935C4
 - Indent mark: *none*
 
-### Family B2: QT18B20 with -0.5 °C Temperature Offset at 0 °C
+### Family B2: 7Q-Tek QT18B20 with -0.5 °C Temperature Offset at 0 °C
 ***Obtained both probes and chips of this series from a number of vendors in 2019. Three vendors sent chips marked 7Q-Tek rather than DALLAS***
 * ROM patterns \[5\]: 28-FF-tt-ss-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
@@ -178,6 +179,7 @@ The chips follow the description of Family A above with the following exceptions
 * ROM code can **not** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 587-697 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* The die has "7Q-Tek" written on it (using the Chinese character for digit 7).
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
@@ -266,8 +268,11 @@ The chips follow the description of Family A above with the following exceptions
 * ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 
+## GXCAS 18B20
+The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading as GXCAS, seems to be distributed independently by GXCAS and UMW (Family B1). According to their web page, GXCAS has only been around since January 2018. While GXCAS does not have a datasheet online, the datasheet on the UMW web page emphasizes the addition of two user-defined bytes in the scratchpad register, and the possibility of changing the ROM address \[14\]. A number of these chips bear fake DS18B20 topmarks. GXCAS is clearly proud of their product as they write their company name prominently onto the die.
+
 ## 7Q-Tek QT18B20
-The QT18B20 is a DS18B20 clone developed and sold by Beijing 7Q Technology Inc (Family B). The datasheet of the QT18B20 emphasizes the addition of two user-defined bytes in the scratchpad register \[12\]. Unlike the data sheet of the DS18B20, it does not state that the ROM code is lasered. A large number of these chips bear fake DS18B20 topmarks.
+The QT18B20 is a DS18B20 clone developed and sold by Beijing 7Q Technology Inc, trading as 7Q-Tek (Family B2). The datasheet of the QT18B20 emphasizes the addition of two user-defined bytes in the scratchpad register \[12\]. Unlike the data sheet of the DS18B20, it does not state that the ROM code is lasered. A large number of these chips bear fake DS18B20 topmarks. 7Q-Tek is clearly proud of their product as they write their company name prominently onto the die.
 
 ## MAX31820
 The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
