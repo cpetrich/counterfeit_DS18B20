@@ -123,10 +123,10 @@ The chips follow the description of Family A above with the following exceptions
 - Example topmark: DALLAS 18B20 1136C4 +152AI
 - Indent mark: ``THAI <letter>``
 
-### Family A-Fishy2: Stolen?
+### Family A-Fishy2
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
 
-*If I were to make a wild guess I would say the dies predate ``C4`` and that either the dies themselves were diverted or the masks used to produce the dies were stolen \[5\].*
+*No idea what this is, but these are not Maxim ``C4`` dies.*
 
 * ROM pattern \[5\]: 28-00-ss-00-tt-tt-tt-crc, 28-ss-00-ss-tt-tt-tt-crc, 28-ss-00-00-tt-tt-00-crc
 
