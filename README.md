@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 22 January 2020.
+> Author: Chris Petrich, 25 January 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -268,6 +268,9 @@ The chips follow the description of Family A above with the following exceptions
 	- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
 * ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
+
+## Solution to the 85 °C-Problem
+There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in authentic DS18B20 \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement. Does not work with clones of Families B, C, or D, though.
 
 ## GXCAS 18B20
 The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading as GXCAS, seems to be distributed independently by GXCAS and UMW (Family B1). According to their web page, GXCAS has only been around since January 2018. While GXCAS does not have a datasheet online, the datasheet on the UMW web page emphasizes the addition of two user-defined bytes in the scratchpad register, and the possibility of changing the ROM address \[14\]. A number of these chips bear fake DS18B20 topmarks. GXCAS is clearly proud of their product as they write their company name prominently onto the die.
