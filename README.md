@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an authorized distributor (DigiKey, RS, Farnell, Mouser, Conrad, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
 
-> Author: Chris Petrich, 25 January 2020.
+> Author: Chris Petrich, 1 February 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -147,8 +147,8 @@ The chips follow the description of Family A above with the following exceptions
 ### Family B1: GXCAS 18B20, Matching Datasheet Temperature Offset Curve
 ***Obtained probes from a number of vendors in 2019, obtained chips from two vendors in 2019. One vendor sent chips marked UMW rather than DALLAS***
 * ROM patterns \[5\]:
-	- 28-AA-tt-ss-ss-ss-ss-crc (GXCAS-calibrated?)
-	- 28-tt-tt-ss-ss-ss-ss-crc (UMW-calibrated?)
+	- 28-AA-tt-ss-ss-ss-ss-crc (GXCAS-branded)
+	- 28-tt-tt-ss-ss-ss-ss-crc (UMW-branded)
 * Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / UMW scratchpad \[5,12,14\]:
 	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
@@ -163,6 +163,7 @@ The chips follow the description of Family A above with the following exceptions
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
+- Example topmark: DALLAS 18B20 1804C4 +051AG
 - Example topmark: DALLAS 18B20 1810C4 +051AG
 - Example topmark: GXCAS 18B20E 1847D02
 - Example topmark: UMW 18B20 1935C4
