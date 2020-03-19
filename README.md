@@ -222,13 +222,13 @@ The chips follow the description of Family A1 above with the following exception
 	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB, 0xDD (5 bytes), 0xEE (5 bytes) \[5\], or
 	+ 0x4D, 0x8B (8 bytes), 0xBA, 0xBB \[5\].
 * First byte following undocumented function code 0x8B is \[5\]
-	+ ``0x06``: Sensors **do not work with Parasitic Power**. Sensors leave data line floating when powered parasitically \[5\].
+	+ ``0x06``: Sensors **do not work with Parasitic Power**. Sensors leave data line **floating** when powered parasitically \[5\].
 	+ ``0x02``: Sensors do work in parasitic power mode (and report correctly whether they are parasitically powered).
 * It is possible to send arbitrary content as ROM code and for bytes 5, 6, and 7 of the status register after undocumented function codes 0xA3 and 0x66, respectively \[5\]. The family code of the device can be changed \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Very noisy data \[5\].
 * Polling after function code 0x44 indicates approx. 11 ms (eleven) for conversion regardless of measurement resolution \[5\].
 * Chips **contain a supercap rather than an EEPROM** to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
-	+ The supercap retains memory for several minutes unless Vcc is pulled to GND, in which case memory retention is 5 to 30 seconds \[5\].
+	+ The supercap retains memory for several minutes unless the Vcc pin is connected to the GND pin, in which case memory retention is 5 to 30 seconds \[5\].
 * Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-48-1B-77 **-91-** 17-02-55  (working parasitic power mode)
@@ -248,7 +248,7 @@ The chips follow the description of Family A1 above with the following exception
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB, 0xDD (3 bytes), 0xEE (3 bytes) \[5\], or
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB \[5\].
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
-* Sensors **do not work with Parasitic Power**. Sensors draw data line low while powered parasitically \[5\].
+* Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
@@ -274,7 +274,7 @@ The chips follow the description of Family A1 above with the following exception
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 
 ## Solution to the 85 °C-Problem
-There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in authentic DS18B20 \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement. Does not work with clones of Families B, C, or D, though.
+There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement. Does not work with clones of Families B, C, or D, though.
 
 ## GXCAS 18B20
 The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading as GXCAS, seems to be distributed independently by GXCAS and UMW (Family B1). According to their web page, GXCAS has only been around since January 2018. While GXCAS does not have a datasheet online, the datasheet on the UMW web page emphasizes the addition of two user-defined bytes in the scratchpad register, and the possibility of changing the ROM address \[14\]. A number of these chips bear fake DS18B20 topmarks. GXCAS is clearly proud of their product as they write their company name prominently onto the die.
