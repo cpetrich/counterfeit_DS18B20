@@ -1,5 +1,5 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
-...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those sites were counterfeit.
+...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days) or an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
 > Author: Chris Petrich, 25 March 2020.
 > License: CC BY.
@@ -33,7 +33,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
 
-Otherwise, (I) one can test for compliance with the datasheet. If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least 2009 \[5\]) \[5\].
+Otherwise, (I) one can test for compliance with the datasheet. (One [should](https://www.maximintegrated.com/en/aboutus/maxim-corporate-policies/counterfeit-parts.html) actually, as even authentic parts may have been mishandled along an unauthorized distribution chain. But that's yet another issue.) If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least 2009 \[5\]) \[5\].
 
 Regarding (I), discrepancy between what the current datasheet says should happen and what the sensors do include \[1,5\]
 * Family B: reserved bytes in scratchpad register can be overwritten (by following instructions in the datasheet)
