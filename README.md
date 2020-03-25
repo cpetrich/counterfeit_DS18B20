@@ -106,7 +106,7 @@ In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changi
 ### Family A1-Fishy: Authentic but Stolen?
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
 
-*If I were to make a wild guess I would say these chips were diverted somewhere toward the end of the Maxim production pipeline (stolen?) \[5\].* These chips are marked as produced in Thailand rather than Philippines.
+*If I were to make a wild guess I would say these chips were diverted somewhere toward the end of the Maxim production pipeline (stolen?) \[5\]. Fun fact: the vendor advertised these chips as QT18B20, so as sold these were actually counterfeits of DS18B20 clones.* These chips are marked as produced in Thailand rather than Philippines.
 
 * ROM pattern \[5\]: 28-tt-tt-Cs-03-00-00-crc
 
