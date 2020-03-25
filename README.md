@@ -129,14 +129,14 @@ The chips follow the description of Family A above with the following exceptions
 ### Family A2: Good Clone with Poor Temperature Performance
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
 
-*No idea what this is, but these are not Maxim ``C4`` dies.*
+*These chips are not Maxim-produced.*
 
 * ROM pattern \[5\]: 28-00-ss-00-tt-tt-tt-crc, 28-ss-00-ss-tt-tt-tt-crc, 28-ss-00-00-tt-tt-00-crc
 
 The chips follow the description of Family A1 above with the following exceptions \[5\]:
 * The ROM pattern is incompatible with what Maxim produces.
 * The Trim2 value is ``0xFB`` or ``0xFC``, i.e. incompatible with a known \[5\] Maxim production suggested by the date code. (Note that this means the curve parameter is 0x1f, i.e. the highest value possible \[5\]. Also, the offset parameter spreads over 200 units rather than a range typical for Family A1 \[5\].)
-* The time for temperature conversion spans a remarkably wide range from 325 to 502 ms between chips \[5\]. This range remains wide and outside the bounds of Family A1 even when applying more recent trim settings \[5\]. Conversion time increases noticably with temperature (approx. 10% over 100 °C) \[5\].
+* The time for temperature conversion spans a remarkably wide range from 325 to 502 ms between chips \[5\]. This range remains wide and outside the bounds of Family A1 even when applying more recent trim settings \[5\]. Conversion time increases noticably with temperature (approx. 10% over 100 °C) \[5\]. A conversion time of <500 ms is compatible with claims in the 7Q-Tek QT18B20 datasheet \[12\].
 * Typical temperature offset at at 0 °C is -3.5 to -1.8 °C \[5\]. (Anecdotally: error seems to be smaller at higher temperatures \[5\].) Very little if any temperature discretization noise \[5\].
 * Alarm settings (i.e., scratchpad bytes 2 and 3) appear to have random content.
 * *Some* chips retain their scratchpad content across a 100 ms power cycle.
@@ -284,6 +284,11 @@ The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading a
 
 ## 7Q-Tek QT18B20
 The QT18B20 is a DS18B20 clone developed and sold by Beijing 7Q Technology Inc, trading as 7Q-Tek (Family B2). The datasheet of the QT18B20 emphasizes the addition of two user-defined bytes in the scratchpad register \[12\]. Unlike the data sheet of the DS18B20, it does not state that the ROM code is lasered. A large number of these chips bear fake DS18B20 topmarks. 7Q-Tek is clearly proud of their product as they write their company name prominently onto the die.
+
+While it is unclear who designed or produced chips of Family A2, Family A2 appears to have been an inspiration for the Family B2 7Q-Tek QT18B20, based on the following observations:
+* The QT18B20 datasheet claims that a temperature conversion takes <500 ms \[12\]. This is consistent with the actual behavior of Family A2. (While the UMW datasheet claims the same \[14\], one of the datasheets appears to have been used as a template for the other.)
+* According to the datasheet version history, the earliest version of the QT18B20 datasheet did not mention user-defined bytes \[12\]. Family A2 does not have user-defined bytes in the scratchpad register.
+* The die ciruit of Family A2 resembles the style of both the die of Family A1 (produced by Maxim) and the die of Family B2 (produced by 7Q-Tek). The die size is significantly different from Family A1, so it's not a Maxim-produced DS18B20.
 
 ## MAX31820
 The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
