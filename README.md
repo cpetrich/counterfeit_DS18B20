@@ -28,7 +28,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The marking inside the indent on the rear of the case is
 	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on most(?) chips going back at least as far as 2009 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``L``, ``M``, ``N``, ``O``, ``S``, ``T``, ``U``, ``V``, ``W``, ``X`` and possibly others, at least on some chips produced around 2011 \[5\].
-* From what I've seen, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``Thai`` in the indent \[5\].
+* From what I've seen, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``THAI`` in the indent \[5\].
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
