@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 4 April 2020.
+> Author: Chris Petrich, 5 April 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -82,6 +82,13 @@ In addition to DS18B20 originally produced by Dallas Semiconductor and continued
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families C or A.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
+
+### Decapping
+![Dies after decapping of authentic Maxim DS18B20 and clones](images/DS18B20_die_collage_authentic_and_clones_200405.jpg)
+
+This collage shows photos of the [dies](https://en.wikipedia.org/wiki/Die_(integrated_circuit)) of all DS18B20 Families we encountered in 2019. All photos are at the same scale, approx. 1.4 mm in width. We broke the TO-92 case open with pliers, detached the die from the plastic case by boiling in colophony, and removed the colophony with acetone in an ultrasonic bath. Photos were taken with a rather ancient USB camera.
+
+Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other families are clones. Note the similarities between the dies of Families D1 and D2 (consistent with their similarity in software) and the signifcant differences between Families B1 and B2 (as opposed to their similarity in software).
 
 ### Family A1: Authentic Maxim DS18B20
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from a few vendors in 2019***
