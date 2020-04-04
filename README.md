@@ -83,7 +83,7 @@ In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, German
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
-### Decapping
+### Decapping DS18B20
 ![Dies after decapping of authentic Maxim DS18B20 and clones](images/DS18B20_die_collage_authentic_and_clones_200405.jpg)
 
 This collage shows photos of the [dies](https://en.wikipedia.org/wiki/Die_(integrated_circuit)) of all DS18B20 Families we encountered in 2019. All photos are at the same scale, approx. 1.4 mm in width. We broke the TO-92 case open with pliers, detached the die from the plastic case by boiling in colophony, and removed the colophony with acetone in an ultrasonic bath. Photos were taken with a rather ancient USB camera.
