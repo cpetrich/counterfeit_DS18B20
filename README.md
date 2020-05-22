@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 5 April 2020.
+> Author: Chris Petrich, 22 May 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -103,6 +103,7 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 	+ The offset parameter shifts the temperature output over a range of approx. 100 °C (0.053 °C per unit), while the curve parameter shifts the temperature over a range of 3.88 °C (0.12 °C per unit), at least in current versions of the chip \[5\]. Example values of 2019 are ``offset = 0x420`` and ``curve = 0x0E``, i.e. they lie pretty central within their respective ranges.
 * Temperature offset of current batches (2019) is as shown on the [Maxim FAQ](https://www.maximintegrated.com/en/support/faqs/ds18b20-faq.html) page, i.e. approx. +0.1 °C at 0 °C \[6\] (*i.e., not as shown on the datasheet \[1,9\]. The plot on the datasheet stems from measurements at the time of introduction of the sensor 10+ years ago \[5,10\].*). Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates a spread of 584-615 ms between sensors for a 12-bit temperature conversion at room temperature \[5\]. Conversion time is easily repeatable for individual chips. Lower resolutions cut the time in proportion, i.e. 11 bit-conversions take half the time. The trim parameters affect the conversion time.
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed (in both normal and parasitic power modes). \[5\].
 * It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful \[5\] (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
@@ -144,6 +145,7 @@ The chips follow the description of Family A1 above with the following exception
 * The ROM pattern is incompatible with what Maxim produces.
 * The Trim2 value is ``0xFB`` or ``0xFC``, i.e. incompatible with a known \[5\] Maxim production suggested by the date code. (Note that this means the curve parameter is 0x1f, i.e. the highest value possible \[5\]. Also, the offset parameter spreads over 200 units rather than a range typical for Family A1 \[5\].)
 * The time for temperature conversion spans a remarkably wide range from 325 to 502 ms between chips \[5\]. This range remains wide and outside the bounds of Family A1 even when applying more recent trim settings \[5\]. Conversion time increases noticably with temperature (approx. 10% over 100 °C) \[5\]. A conversion time of <500 ms is compatible with claims in the 7Q-Tek QT18B20 datasheet \[12\].
+* Does not return power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode \[5\].
 * Typical temperature offset at at 0 °C is -3.5 to -1.8 °C \[5\]. (Anecdotally: error seems to be smaller at higher temperatures \[5\].) Very little if any temperature discretization noise \[5\].
 * Alarm settings (i.e., scratchpad bytes 2 and 3) appear to have random content.
 * *Some* chips retain their scratchpad content across a 100 ms power cycle.
@@ -166,6 +168,7 @@ The chips follow the description of Family A1 above with the following exception
 	- if 5 data bytes are sent (as per UMW datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. (The UMW datasheet states that the ROM code can be changed but does not specify how \[14\].) Family code (``0x28``) cannot be changed \[5\].
+* Substitutes ``0x0c`` for actual value of ``<byte 6>`` if scratchpad register is read before temperature conversion has finished in parasitic power mode.
 * Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * The die has "GXCAS" written on it.
@@ -189,6 +192,7 @@ The chips follow the description of Family A1 above with the following exception
 	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code **cannot** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
+* Substitutes ``0x0c`` for actual value of ``<byte 6>`` if scratchpad register is read before temperature conversion has finished in parasitic power mode.
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 587-697 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * The die has "7Q-Tek" written on it (using the Chinese character for digit 7).
@@ -213,6 +217,7 @@ The chips follow the description of Family A1 above with the following exception
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
+* Reported power mode (parasitic/normal) in response to function code 0xB4 may be wrong, depending on the order power pin and data line are powered (e.g. if power pin is at GND while the data line is powered and the power pin is then connected to Vcc, the chip will continue to report parasitic power mode) \[5\].
 * Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
@@ -284,7 +289,7 @@ The chips follow the description of Family A1 above with the following exception
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
 
 ## Solution to the 85 °C-Problem
-There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement. Does not work with clones of Families B, C, or D, though.
+There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
 
 ## GXCAS 18B20
 The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading as GXCAS, seems to be distributed independently by GXCAS and UMW (Family B1). According to their web page, GXCAS has only been around since January 2018. While GXCAS does not have a datasheet online, the datasheet on the UMW web page emphasizes the addition of two user-defined bytes in the scratchpad register, and the possibility of changing the ROM address \[14\]. A number of these chips bear fake DS18B20 topmarks. GXCAS is clearly proud of their product as they write their company name prominently onto the die.
@@ -298,7 +303,7 @@ While it is unclear who designed or produced chips of Family A2, Family A2 appea
 * The die ciruit of Family A2 resembles the style of both the die of Family A1 (produced by Maxim) and the die of Family B2 (produced by 7Q-Tek). The die size is significantly different from Family A1, so it's not a Maxim-produced DS18B20.
 
 ## MAX31820
-The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A and Maxim-produced MAX31820 in software \[5\].
+The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A1 and Maxim-produced MAX31820 in software \[5\].
 
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuie sensors, we have not come across sensors with spoofed ROM \[5\].)
