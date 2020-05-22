@@ -217,7 +217,7 @@ The chips follow the description of Family A1 above with the following exception
 * Does not return data on undocumented function code 0x68 or any other undocumented function code \[5\].
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
-* Reported power mode (parasitic/normal) in response to function code 0xB4 may be wrong, depending on the order power pin and data line are powered (e.g. if power pin is at GND while the data line is powered and the power pin is then connected to Vcc, the chip will continue to report parasitic power mode) \[5\].
+* Reported power mode (parasitic/normal) in response to function code 0xB4 may be wrong, depending on the order power pin and data line are powered (e.g. if power pin is at GND while Data is powered and the power pin is then connected to Vcc, the chip will continue to report parasitic power mode) \[5\].
 * Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
@@ -244,6 +244,7 @@ The chips follow the description of Family A1 above with the following exception
 * Polling after function code 0x44 indicates approx. 11 ms (eleven) for conversion regardless of measurement resolution \[5\].
 * Chips **contain a supercap rather than an EEPROM** to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
 	+ The supercap retains memory for several minutes unless the Vcc pin is connected to the GND pin, in which case memory retention is 5 to 30 seconds \[5\].
+* Chips are sensitive to the way power is applied \[5\]. E.g. to power up from all pins attached to GND, it seems to be a good idea to leave Data and power pin floating for a bit (e.g., 100 ms) before actually applying a voltage to the power pin and Data \[5\].
 * Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-48-1B-77 **-91-** 17-02-55  (working parasitic power mode)
