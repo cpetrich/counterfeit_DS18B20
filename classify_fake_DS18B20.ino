@@ -15,7 +15,7 @@
  *   
  *   File:    classify_fake_DS18B20.ino
  *   Author:  Chris Petrich
- *   Version: 24 May 2020
+ *   Version: 25 May 2020
  *   
  *   Source:  https://github.com/cpetrich/counterfeit_DS18B20/
  *   Documentation:  https://github.com/cpetrich/counterfeit_DS18B20/
@@ -260,7 +260,7 @@ void setup() {
   
   ds = new OneWire(pin_onewire);
     
-  Comm.println(F("classify_fake_DS18B20.ino version 2020/05/24"));
+  Comm.println(F("classify_fake_DS18B20.ino version 2020/05/25"));
   Comm.println();  
   Comm.println(F("This sketch performs a minimal test to classify"));
   Comm.print(F("  1-wire sensors attached to pin "));
@@ -359,6 +359,7 @@ void loop() {
       // Don't have a test for response to undocumented codes, so check if
       // config register is constant, which is unique property among 2019 Families.
       uint8_t buff[9];
+      uint8_t cfg1, cfg2;
       ds->reset();
       ds->select(addr);
       ds->write(0x4E);
@@ -367,7 +368,7 @@ void loop() {
       ds->write(0x00);
       if (!read_scratchpad(addr, buff)) read_scratchpad(addr, buff);
       if (is_all_00(buff, 9) || (0 != OneWire::crc8(buff,9))) goto err_C;
-      uint8_t cfg1 = buff[4];
+      cfg1 = buff[4];
       ds->reset();
       ds->select(addr);
       ds->write(0x4E);
@@ -376,7 +377,7 @@ void loop() {
       ds->write(0xff);
       if (!read_scratchpad(addr, buff)) read_scratchpad(addr, buff);
       if (is_all_00(buff, 9) || (0 != OneWire::crc8(buff,9))) goto err_C;
-      uint8_t cfg2 = buff[4];
+      cfg2 = buff[4];
       ds->reset();
       ds->select(addr);
       ds->write(0x64);
