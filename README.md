@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 24 May 2020.
+> Author: Chris Petrich, 16 June 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -83,7 +83,7 @@ Note that none of the points above give certainty that a particular DS18B20 is a
 ## What families of DS18B20-like chips can I expect to encounter?
 In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A1, below), there are clones produced independently by at least 4 other companies as of 2019 (Families B1, B2, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2. Chips of Family A2 were a rare find, behave surprisingly similar to authentic chips but have poor temperature accuracy.
 
-In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families C or A.
+In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A1 or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families A1 or C.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
@@ -122,11 +122,11 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 
 * ROM pattern \[5\]: 28-tt-tt-Cs-03-00-00-crc
 
-The chips follow the description of Family A above with the following exceptions \[5\]:
+The chips follow the description of Family A1 above with the following exceptions \[5\]:
 * Both alarm registers are set to 0x00 (scratchpad bytes 2 and 3).
 * The conversion resolution is set to 9 bits (i.e., both configuartion bits are 0).
 * Both trim values are 0x00, resulting in wrong temperatures (i.e., very low) and conversion times in the range of 400 to 500 ms.
-	+ Once trim values are set to something reasonable, the time for temperature conversion is within the range specified for Family A above.
+	+ Once trim values are set to something reasonable, the time for temperature conversion is within the range specified for Family A1 above.
 
 - Example ROM: 28-9B-9E-CB-03 **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/00/00/**1F**/**FF**/0C/**10**/74
@@ -225,7 +225,7 @@ The chips follow the description of Family A1 above with the following exception
 * Reported power mode (parasitic/normal) in response to function code 0xB4 may be wrong, depending on the order power pin and data line are powered (e.g. if power pin is at GND while Data is powered and the power pin is then connected to Vcc, the chip will continue to report parasitic power mode) \[5\].
 * Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
-* Default alarm register settings differ from Family A (``0x55`` and ``0x00``) \[5\].
+* Default alarm register settings differ from Family A1 (``0x55`` and ``0x00``) \[5\].
 
 - Example ROM: 28 **-FF-64-** 1D-CD-96-F2-01
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
@@ -244,13 +244,13 @@ The chips follow the description of Family A1 above with the following exception
 * First byte following undocumented function code 0x8B is \[5\]
 	+ ``0x06``: Sensors **do not work with Parasitic Power**. Sensors leave data line **floating** when powered parasitically \[5\].
 	+ ``0x02``: Sensors do work in parasitic power mode (and report correctly whether they are parasitically powered).
-* It is possible to send arbitrary content as ROM code and for bytes 5, 6, and 7 of the status register after undocumented function codes 0xA3 and 0x66, respectively \[5\]. The family code of the device can be changed \[5\].
+* It is possible to send arbitrary content as ROM code and for bytes 5, 6, and 7 of the scratchpad register after undocumented function codes 0xA3 and 0x66, respectively \[5\]. The family code of the device can be changed \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Very noisy data \[5\].
 * Polling after function code 0x44 indicates approx. 11 ms (eleven) for conversion regardless of measurement resolution \[5\].
 * Chips **contain a supercap rather than an EEPROM** to hold alarm and configuration settings \[5\]. I.e., the last temperature measurement and updates to the alarm registers are retained between power cycles that are not too long \[5\].
 	+ The supercap retains memory for several minutes unless the Vcc pin is connected to the GND pin, in which case memory retention is 5 to 30 seconds \[5\].
 * Chips are sensitive to the way power is applied \[5\]. E.g. to power up from all pins attached to GND, it seems to be a good idea to leave Data and power pin floating for a bit (e.g., 100 ms) before actually applying a voltage to the power pin and Data \[5\].
-* Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
+* Initial temperature reading is 25 °C or the last reading before power-down \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-48-1B-77 **-91-** 17-02-55  (working parasitic power mode)
 - Example ROM: 28-24-1D-77 **-91-** 04-02-CE  (responds to 0xDD and 0xEE)
@@ -272,7 +272,7 @@ The chips follow the description of Family A1 above with the following exception
 * Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
-* Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A (``0x55`` and ``0x05``) \[5\].
+* Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
 
 - Example ROM: 28-90-FE-79 **-97-** 00-03-20
 - Example ROM: 28-FD-58-94 **-97-** 14-03-05
@@ -293,6 +293,8 @@ The chips follow the description of Family A1 above with the following exception
 	- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
 * ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
+* ROM patterns \[5,11\]: 28-EE-tt-tt-ss-ss-ss-crc
+	- Example ROM: 28 **-EE-** 73-2A-1E-16-01-CA
 
 ## Solution to the 85 °C-Problem
 There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
@@ -320,7 +322,7 @@ The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) a
 Sensors or probes with authentic or cloned DS18B20 were purchased from the follwing sources. Note that only **sensors** purchased from offical Maxim distributors are authentic chips that are guaranteed to have been handled correctly. Free samples provided by Maxim Integrated through their online ordering system are gratefully acknowledged.
 
 **Official Distributors:** Maxim Integrated, Digikey, Farnell, Mouser, RS Components
-**ebay:** 5hk1584, alice1101983, alphago-it, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, icmarket2009, jk_parts, kingelectronics15, lovesell2013, mecklenburg8, modul_technik, moore_estates, nouteclab, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, yantzlf
+**ebay:** 5hk1584, alice1101983, alphago-it, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, enigma-component-shop, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, icmarket2009, jk_parts, kingelectronics15, lovesell2013, mecklenburg8, modul_technik, moore_estates, nouteclab, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, yantzlf
 **AliExpress:** AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, YLGA, YX Electronic
 **Other:** Adafruit, AZ-Delivery, Banggood, Taizhou Best Electric Equipment, Conrad Electronic, DFRobot, DROK,  Elektroimportøren, Elfa Distrelec, Shanghai Jiutian Automation Equipment, Kjell & Company, LCSC, Dongguan Nangudi Electronics, Quest Components, Shenzhen RBD Sensor Technology, Reichelt Elektronik, Shenzhen Senstech Electronic Technology, SparkFun, TELMAL, Dongguan Tianrui Electronics, YourDuino
 
