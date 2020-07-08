@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 6 July 2020.
+> Author: Chris Petrich, 9 July 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -289,6 +289,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1923C4 +051AG
 - Example topmark: DALLAS 18B20 1943C4 +051AG
 - Example topmark: DALLAS 18B20 1828C4 +233AA
+- Example topmark: DALLAS 18B20 2008C4 +817AB *(2020)*
 - Indent mark: *none*
 
 ### Obsolete as of 2019
@@ -327,7 +328,7 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 
 **Official Distributors:** Maxim Integrated, Digikey, Farnell, Mouser, RS Components
 **ebay:** 5hk1584, alice1101983, alphago-it, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, enigma-component-shop, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, icmarket2009, jk_parts, kingelectronics15, lovesell2013, lucas89-8, makershop, mecklenburg8, modul_technik, moore_estates, nouteclab, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, yantzlf
-**AliExpress:** AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, YLGA, YX Electronic
+**AliExpress:** AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, Win win., YLGA, YX Electronic
 **Other:** Adafruit, AZ-Delivery, Banggood, Taizhou Best Electric Equipment, Conrad Electronic, DFRobot, DROK,  Elektroimportøren, Elfa Distrelec, Shanghai Jiutian Automation Equipment, Kjell & Company, LCSC, Dongguan Nangudi Electronics, Quest Components, Shenzhen RBD Sensor Technology, Reichelt Elektronik, Shenzhen Senstech Electronic Technology, SparkFun, TELMAL, Dongguan Tianrui Electronics, YourDuino
 
 ## References
