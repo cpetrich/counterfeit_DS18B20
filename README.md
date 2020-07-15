@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 14 July 2020.
+> Author: Chris Petrich, 15 July 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -25,8 +25,8 @@ Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized 
 
 Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 case. 
 * As of writing (2019), the topmark of original Maxim chips is lasered rather than printed. 
-* The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer),
-* the ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
+* The first two rows, ``DALLAS 18B20``, specify that this part is a DS18B20 (Dallas Semiconductor being the original producer), parasitic power-only chips bear the maring ``DALLAS 18B20P``.
+* The ``+`` in the 4th row indicates that the part is RoHS compliant (\[1\]). 
 * The 3rd row specifies production year and week number of the year (in this case, week 32 of 2019), and 
 * the last two characters in row 3 specify the revision of the die (currently ``C4``). 
 * In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. 
@@ -34,7 +34,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The marking inside the indent on the rear of the case is
 	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on most(?) chips going back at least as far as 2009 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``J``, ``K``, ``L``, ``M``, ``N``, ``O``, ``S``, ``T``, ``U``, ``V``, ``W``, ``X`` and possibly others, at least on some chips produced in 2011 \[5\]. The ``<letter>`` uses a different font than the letters making up ``THAI``.
-* From what I've seen, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``THAI`` in the indent \[5\].
+* From what I've seen on the TO-92 package, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``THAI`` in the indent \[5\].
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
@@ -83,9 +83,9 @@ Alternatively,
 Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\].
 
 ## What families of DS18B20-like chips can I expect to encounter?
-In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A1, below), there are clones produced independently by at least 4 other companies as of 2019 (Families B1, B2, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2. Chips of Family A2 were a rare find, behave surprisingly similar to authentic chips but have poor temperature accuracy.
+In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A1, below), there are TO-92 clones produced independently by at least 4 other companies as of 2019 (Families B1, B2, C, D) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2. Chips of Family A2 were a rare find, behave surprisingly similar to authentic chips but have poor temperature accuracy.
 
-In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A1 or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families A1 or C.
+In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A1 or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips in TO-92 package, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families A1 or C.
 
 In the ROM patterns below, *tt* and *ss* stand for fast-changing and slow-changing values within a production run \[5\], and *crc* is the CRC8 checksum defined in the datasheet \[1\].
 
@@ -101,7 +101,7 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 * ROM pattern \[5\]: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all *successful* temperature conversions, and ``0x00 < <byte 6> <= 0x10`` \[2,3,5\]. I.e., ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``.
 * According to current behavior \[5\] and early datasheets \[9\], the power-up state of reserved ``<byte 6>`` in the Scratchpad register is ``0x0c``.
-* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2009, and has been 0x74 since the fall of 2016 (all with ``C4`` die) \[5\].
+* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2009, and has been 0x74 since the fall of 2016 (all with ``C4`` die) \[5\]. (In parasitic power-only chips, Trim2 is 0xDB or 0xDC as of 2020.)
 	+ Trim1 and Trim2 encode two parameters \[5\]. Let the bit pattern of Trim1 be ``[t17, t16, t15, t14, t13, t12, t11, t10]`` (MSB to LSB) and Trim2 be ``[t27, t26, t25, t24, t23, t22, t21, t20]``. Then,
 		- offset parameter = ``[t22, t21, t20, t10, t11, t12, t13, t14, t15, t16, t17]`` (unsigned 11 bit-value) \[5\], and
 		- curve parameter = ``[t27, t26, t25, t24, t23]`` (unsigned 5 bit-value) \[5\].
