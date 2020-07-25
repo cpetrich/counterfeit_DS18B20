@@ -101,7 +101,7 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 * ROM pattern \[5\]: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all *successful* temperature conversions, and ``0x00 < <byte 6> <= 0x10`` \[2,3,5\]. I.e., ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``.
 * According to current behavior \[5\] and early datasheets \[9\], the power-up state of reserved ``<byte 6>`` in the Scratchpad register is ``0x0c``.
-* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2009, and has been 0x74 since the fall of 2016 (all with ``C4`` die) \[5\]. (In parasitic power-only chips, Trim2 is 0xDB or 0xDC as of 2020.)
+* Returns "Trim1" and "Trim2" values if queried with function codes 0x93 and 0x68, respectively \[4\]. The bit patterns are very similar to each other within a production run \[4\]. Trim2 is currently less likely to equal 0xff than Trim1 \[5\]. Trim2 was 0xDB or 0xDC since at least 2009, and has been 0x73/0x74 since the fall of 2016 (all with ``C4`` die) \[5\]. (In parasitic power-only chips, Trim2 is 0xDB or 0xDC as of 2020.)
 	+ Trim1 and Trim2 encode two parameters \[5\]. Let the bit pattern of Trim1 be ``[t17, t16, t15, t14, t13, t12, t11, t10]`` (MSB to LSB) and Trim2 be ``[t27, t26, t25, t24, t23, t22, t21, t20]``. Then,
 		- offset parameter = ``[t22, t21, t20, t10, t11, t12, t13, t14, t15, t16, t17]`` (unsigned 11 bit-value) \[5\], and
 		- curve parameter = ``[t27, t26, t25, t24, t23]`` (unsigned 5 bit-value) \[5\].
@@ -319,6 +319,18 @@ While it is unclear who designed or produced chips of Family A2, Family A2 appea
 
 ## MAX31820
 The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A1 and Maxim-produced MAX31820 in software \[5\].
+
+## Methods
+By popular request (Issue [11](https://github.com/cpetrich/counterfeit_DS18B20/issues/11)), this section is supposed to give background to (some of) the results and conclusions above. I'll add to it very slowly as time permits.
+
+Investigations were on DS18B20 rather than the DS18B20-PAR variant or the DS18S20. We have only a hand full of DS18B20-PAR and DS18S20 sensors while we have hundreds of DS18B20.
+
+### Sample basis for analysis of Family A1
+![Authentic Maxim DS18B20 serial number vs date code](images/Family-A1_serial-number_vs_date-code.png)
+
+Above figure shows the range of production dates and ROM codes (serial numbers) of the Family A1 sensors investigated that were bought as chips. Also included is a single-digit number of chips contained in probes that we opened to read off the topmark. The production date according to the date code is on the x-axis, the serial number according to the ROM is on the y-axis, the dots are the individual chips (N>200 but individual batches appear as smeared-out blobs), the gray area highlights 2019. We have chips produced from 2009 through 2020 and all chips have a ``C4`` die, no chips have date codes of 2010, 2014, or 2015. (The serial number of a chip with ROM 28-13-9B-BB- **0B** -00-00-1F is 0x0BBB9B13 and would thus fall between 0x0B and 0x0C on the y-axis.) We see that there is a long term relationship between serial number and date code (dashed line): the serial number increases by approximately 16,500,000 (i.e., approx. 2^24) per year. However, this relationship is only a general guide as can be seen by the degree of scatter around the line and in the enlargement in the inset: of the sensors produced in 2019 that we purchased there were three instances where sensors with a later date code contained an earlier serial number.
+
+We seem to have purchased one of the last batches produced in 2016 with Trim2 calibration constants 0xDB or 0xDC, and one of the first batches with Trim2 calibration constants 0x73 or 0x74. Hence, the change probably took place between weeks 32 and 47 of 2016. (**This is a statement about the DS18B20 rather than the DS18B20-PAR.**)
 
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuie sensors, we have not come across sensors with spoofed ROM \[5\].)
