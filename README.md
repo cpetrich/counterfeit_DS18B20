@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 25 July 2020.
+> Author: Chris Petrich, 18 Aug 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -323,7 +323,7 @@ The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) a
 ## Methods
 By popular request (Issue [11](https://github.com/cpetrich/counterfeit_DS18B20/issues/11)), this section is supposed to give background to (some of) the results and conclusions above. I'll add to it very slowly as time permits.
 
-Investigations were on DS18B20 rather than the DS18B20-PAR variant or the DS18S20. We have only a hand full of DS18B20-PAR and DS18S20 sensors while we have hundreds of DS18B20.
+Investigations were on DS18B20 rather than the DS18B20-PAR variant or the DS18S20. We have only a hand full of DS18B20-PAR and DS18S20 sensors while we have hundreds of DS18B20. Also, all sensors were in the TO-92 case.
 
 ### Sample basis for analysis of Family A1
 ![Authentic Maxim DS18B20 serial number vs date code](images/Family-A1_serial-number_vs_date-code.png)
@@ -331,6 +331,30 @@ Investigations were on DS18B20 rather than the DS18B20-PAR variant or the DS18S2
 Above figure shows the range of production dates and ROM codes (serial numbers) of the Family A1 sensors investigated that were bought as chips. Also included is a single-digit number of chips contained in probes that we opened to read off the topmark. The production date according to the date code is on the x-axis, the serial number according to the ROM is on the y-axis, the dots are the individual chips (N>200 but individual batches appear as smeared-out blobs), the gray area highlights 2019. We have chips produced from 2009 through 2020 and all chips have a ``C4`` die, no chips have date codes of 2010, 2014, or 2015. (The serial number of a chip with ROM 28-13-9B-BB- **0B** -00-00-1F is 0x0BBB9B13 and would thus fall between 0x0B and 0x0C on the y-axis.) We see that there is a long term relationship between serial number and date code (dashed line): the serial number increases by approximately 16,500,000 (i.e., approx. 2^24) per year. However, this relationship is only a general guide as can be seen by the degree of scatter around the line and in the enlargement in the inset: of the sensors produced in 2019 that we purchased there were three instances where sensors with a later date code contained an earlier serial number.
 
 We seem to have purchased one of the last batches produced in 2016 with Trim2 calibration constants 0xDB or 0xDC, and one of the first batches with Trim2 calibration constants 0x73 or 0x74. Hence, the change probably took place between weeks 32 and 47 of 2016. (**This is a statement about the DS18B20 rather than the DS18B20-PAR.**)
+
+### Temperature data
+![Temperature data of DS18B20 sensors](images/Sensor_measurements_by_family_640px.png)
+
+Above figure shows (a) the temperature reading we got from each sensors in an ice-water bath at 0 °C, (b) the amount of noise in successive readings in the ice-water bath, and (c) conversion time for temperature measurements at nominally room temperature (measurements were actually performed anywhere between 0 and 30 °C). A high resolution version of the figure is available at [images/Sensor_measurements_by_family.png](images/Sensor_measurements_by_family.png). Data for (a) and (b) are typically based on 20 successive measurements taken once every 10 s after the sensor had equilibrated in an ice-water bath. Data in (c) are based on as few as a single measurement per sensor as in our experience conversion timing does not scatter, i.e. a single measurement is sufficient to assess the conversion time of a sensor at the current temperature.
+
+Data are grouped along the *x*-axis as follows:
+* A1: Family A1 obtained from official distributor, i.e. both autheticity and proper handling is guaranteed
+* A1 (3rd party distributor): Family A1 obtained from other retailers big or small, including those selling on ebay and AliExpress, and including any sensors contained in probes
+* A2: Family A2
+* B1 (GXCAS): Family B1, based on their ROM apparently distributed by GXCAS
+* B1 (UMW): Family B1, based on their ROM apparently distributed by UMW
+* B2: Family B2
+* C: Family C
+* D1: Family D1
+* D2 (*xy*): Family D2 where the number *xy* in brackets is 5th byte of the ROM (i.e. byte 4).
+Sensors within each group are shown in what I presume is their order of manufacturing, based primarily on the ROM and corroborated somewhat by the order we purchased them.
+Data of Family A1 sensors with ``0x00`` trim values are not shown.
+
+The Maxim-specified temperature error is ±0.5 °C at 0 °C, and this interval is marked in the plot (a) by thin dashed lines. We see that Family A1 sensors have readings typically in the range of -0.1 to +0.2 °C, Family A2 has -2 °C, Family B1 between 0 and -0.5 °C, Family B2 around -0.5 °C, Family C around 0 °C (not enough data points to say for sure), Family D1 between -1 and +1 °C or worse, and Family D2 -- well, it's difficult to say from the data: they started off really badly with performance similar to Family D1 and may or may not have improved since (would need to measure more sensors to say for sure). Measurements were taken once every 10 seconds to avoid artifacts from self heating of sensors contained in probes (i.e. we found that reading once a second increases the temperature returned).
+
+An ideal sensors would only show discretization noise, i.e. have readings fluctuate between the two values that surround the actual temperature. This noise is shown in plot (b) as the standard deviation (``std(T)``) of nominally 20 temperature measurements. If all measurements are the same, ``std(T)`` is zero. If exactly one measurements differs by one discretization step (i.e. by 0.0625 °C) from the other 19 then ``std(T)`` is 0.014 °C, shown as the lower dashed line. If data are evenly split between two adjacent values then ``std(T)`` is 0.031 °C, shown as the upper dashed line. Data points between 0 and the lower dashed line indicate that more than 20 samples were used for that sensor, and data above the upper line indicate that readings fluctuated over a range of at least 2 discretization steps. We see that sensors of Families A, B, and C have essentially only discretization noise. In contrast, Family D1 produces shockingly noisy garbage (i.e. the actual measurement resolution is less than 12 bit), and sensors of Family D2 are also noisy at a level above the discretization noise.
+
+The time required for temperature data conversion is specified as maximum 750 ms in the datasheet (12 bit conversion). The actual time required has (at a given temperature) a well-reproducible, characteristic value for each sensor. This time is shown in plot (c). Family A1 takes around 600 ms for a conversion, while Families A2 and B show a comparatively large inter-sensor variability. Families C and D1 are remarably fast at 30 and 11 ms, respectively, while Family D2 takes around 500 ms or a little less. Although all sensors we measured were faster than 750 ms at room temperature, some sensors of Family B got close to the limit.
 
 ## Warning
 **Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuie sensors, we have not come across sensors with spoofed ROM \[5\].)
