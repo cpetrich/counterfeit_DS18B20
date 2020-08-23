@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 18 Aug 2020.
+> Author: Chris Petrich, 24 Aug 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -154,14 +154,16 @@ The chips follow the description of Family A1 above with the following exception
 * The time for temperature conversion spans a remarkably wide range from 325 to 502 ms between chips \[5\]. This range remains wide and outside the bounds of Family A1 even when applying more recent trim settings \[5\]. Conversion time increases noticably with temperature (approx. 10% over 100 °C) \[5\]. A conversion time of <500 ms is compatible with claims in the 7Q-Tek QT18B20 datasheet \[12\].
 * Does not return power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode \[5\].
 * Typical temperature offset at at 0 °C is -3.5 to -1.8 °C \[5\]. (Anecdotally: error seems to be smaller at higher temperatures \[5\].) Very little if any temperature discretization noise \[5\].
-* Alarm settings (i.e., scratchpad bytes 2 and 3) appear to have random content.
-* *Some* chips retain their scratchpad content across a 100 ms power cycle.
+* Alarm settings (i.e., scratchpad bytes 2 and 3) appear to have random content \[5\].
+* *Some* chips retain their scratchpad content across a 100 ms power cycle \[5\].
 * One specimen tested did not function properly in parasitic mode.
+* *Some* chips have bit errors in the ROM which lead to CRC errors \[5\]. *(2020)*
 * The topmark is printed rather than lasered, and there is no mark in the indent.
 
 - Example ROM: 28-19-00-00-B7-5B-00-41
 - Initial Scratchpad: **50**/**05**/xx/xx/**7F**/**FF**/0C/**10**/xx
 - Example topmark: DALLAS 18B20 1808C4 +233AA
+- Example topmark: DALLAS 18B20 1838C4 +233AA  *(2020)*
 - Indent mark: *none*
 	
 ### Family B1: GXCAS 18B20, Matching Datasheet Temperature Offset Curve
@@ -216,6 +218,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1833C4 +058AA
 - Example topmark: DALLAS 18B20 1908C4 +887AB
 - Example topmark: DALLAS 18B20 1912C4 +001AC (*NB: this date/batch combination is also used on genuie chips \[5\]*)
+- Example topmark: DALLAS 18B20 2012C4 +887AB *(2020)*
 - Example topmark: 7Q-Tek 18B20 1861C02
 - Indent mark: *none*
 
@@ -262,6 +265,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example ROM: 28-21-6D-46 **-92-** 0A-02-B7
 - Initial Scratchpad: 90/01/55/05/7F/7E/81/66/27
 - Example topmark: DALLAS 18B20 1807C4 +051AG
+- Example topmark: DALLAS 18B20 1813C4 +827AH *(2020)*
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Indent mark: *none*
 
@@ -298,10 +302,14 @@ The chips follow the description of Family A1 above with the following exception
 ***Obtained neither probes nor chips in 2019***
 * ROM patterns \[5,7\]: 28-tt-tt-ss-00-00-80-crc
 	- Example ROM: 28-9E-9C-1F **-00-00-80-** 04
+	(apparently still sold to others in 2019 (cf. Issue [17](https://github.com/cpetrich/counterfeit_DS18B20/issues/17)))
 * ROM patterns \[5,11\]: 28-61-64-ss-ss-tt-tt-crc
 	- Example ROM: 28 **-61-64-** 11-8D-F1-15-DE
-* ROM patterns \[5,11\]: 28-EE-tt-tt-ss-ss-ss-crc
-	- Example ROM: 28 **-EE-** 73-2A-1E-16-01-CA
+* ROM patterns \[5\]: 28-EE-tt-tt-ss-ss-ss-crc
+	- Example ROM: 28 **-EE-** 58-49-25-16-01-45 *(2020)*
+	- Example topmark: DALLAS 18B20 1619C4 +827AH *(2020)*
+	- Example topmark: DALLAS 18B20 1709C4 +827AH *(2020)*
+	(received a few chips in 2020: they act like Family B2 at first glance.)
 
 ## Solution to the 85 °C-Problem
 There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
@@ -365,8 +373,8 @@ The time required for temperature data conversion is specified as maximum 750 ms
 Sensors or probes with authentic or cloned DS18B20 were purchased from the follwing sources. Note that only **sensors** purchased from offical Maxim distributors are authentic chips that are guaranteed to have been handled correctly. Free samples provided by Maxim Integrated through their online ordering system are gratefully acknowledged.
 
 **Official Distributors:** Maxim Integrated, Digikey, Farnell, Mouser, RS Components
-**ebay:** 5hk1584, alice1101983, alphago-it, andnov73, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, eckstein-komponente, enigma-component-shop, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, icmarket2009, jk_parts, justpro, kingelectronics15, lovesell2013, lucas89-8, makershop, mecklenburg8, modul_technik, moore_estates, nouteclab, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, xuan33_store, yantzlf
-**AliExpress:** AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, Sensor World, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, Win win., YLGA, YX Electronic
+**ebay:** 5hk1584, alice1101983, alphago-it, andnov73, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, eckstein-komponente, enigma-component-shop, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, icmarket2009, jk_parts, justpro, kingelectronics15, london_shoppings_1, lovesell2013, lucas89-8, makershop, mecklenburg8, modul_technik, moore_estates, nouteclab, \*orchid, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, xuan33_store, yantzlf
+**AliExpress:** All goods are free shipping Store, AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, Sensor World, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, Win win., YLGA, YX Electronic
 **Other:** Adafruit, AZ-Delivery, Banggood, Taizhou Best Electric Equipment, Conrad Electronic, DFRobot, DROK,  Elektroimportøren, Elfa Distrelec, Shanghai Jiutian Automation Equipment, Kjell & Company, LCSC, Dongguan Nangudi Electronics, Quest Components, Shenzhen RBD Sensor Technology, Reichelt Elektronik, Shenzhen Senstech Electronic Technology, SparkFun, TELMAL, Dongguan Tianrui Electronics, YourDuino
 
 ## References
