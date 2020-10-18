@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 10 Sep 2020.
+> Author: Chris Petrich, 18 Oct 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -312,6 +312,10 @@ The chips follow the description of Family A1 above with the following exception
 	- Example topmark: DALLAS 18B20 1709C4 +827AH *(2020)*
 	
 	(received a few chips in 2020: they act like Family B2 at first glance.)
+* Family A1 with die versions prior to ``C4``
+	- Example die code: ``B7`` 
+	
+	(some older chips (pre-2009) had buggy hardware circuits (dies), most infamously the ``B7`` die \[4\], cf. Issue [19](https://github.com/cpetrich/counterfeit_DS18B20/issues/19)).
 
 ## Solution to the 85 °C-Problem
 There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
