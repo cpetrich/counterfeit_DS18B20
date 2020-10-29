@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 18 Oct 2020.
+> Author: Chris Petrich, 29 Oct 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -32,8 +32,9 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * In row 4, the three-digit number followed by two characters are a form of batch code that allows Maxim to trace back the production history. 
 	+ In chips produced 2016 or later I've only come across character combinations ``AB`` and ``AC`` \[5\].
 * The marking inside the indent on the rear of the case is
-	+ ``P`` (Philippines?) on all recent chips (2016 and younger), and on most(?) chips going back at least as far as 2009 \[5\].
+	+ ``P`` (Philippines?) on all chips 2016 through 2019, on most chips in 2020 *(2020)*, and on most(?) chips going back at least as far as 2009 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``J``, ``K``, ``L``, ``M``, ``N``, ``O``, ``S``, ``T``, ``U``, ``V``, ``W``, ``X`` and possibly others, at least on some chips produced in 2011 \[5\]. The ``<letter>`` uses a different font than the letters making up ``THAI``.
+	+ possibly additional markings since 2020 (cf. Issue [21](https://github.com/cpetrich/counterfeit_DS18B20/issues/21)) *(2020)*
 * From what I've seen on the TO-92 package, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``THAI`` in the indent \[5\].
 
 ## How do I know if I am affected?
@@ -115,7 +116,8 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS 18B20 1932C4 +786AB
-- Indent mark: ``P`` (date codes 1150 and newer)
+- Indent mark: ``P`` (date codes 1150 through 2019)
+- Indent mark: possibly options besides ``P`` since 2020 (cf. Issue [21](https://github.com/cpetrich/counterfeit_DS18B20/issues/21)) *(2020)*
 
 ### Family A1-Fishy: Authentic but Stolen?
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
