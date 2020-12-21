@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 29 Oct 2020.
+> Author: Chris Petrich, 22 Dec 2020.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -18,7 +18,7 @@ Also, there are two Arduino sketches provided to test DS18B20 sensors:
 Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level, temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
 
 ## What are we dealing with?
-Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized copy, imitation, substitute, or modification misrepresented as a specific genuie item from an authorized manufacturer \[13\]. As of 2019, the main problem is imitations (**clones**) that are labeled to mislead the unsuspecting buyer. Fortunately, DS18B20 clones are nearly trivially easy to identify: Marking on the chip printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Content of the "scratchpad register" doesn't comply with the datasheet? Probably a counterfeit. Behaves systematically different from known authentic chips? Probably a counterfeit.
+Definitions differ, but following AIR6273, a **counterfeit** is an unauthorized copy, imitation, substitute, or modification misrepresented as a specific genuine item from an authorized manufacturer \[13\]. As of 2019, the main problem is imitations (**clones**) that are labeled to mislead the unsuspecting buyer. Fortunately, DS18B20 clones are nearly trivially easy to identify: Marking on the chip printed rather than lasered? No mark in the rear indent? Probably a conterfeit. Content of the "scratchpad register" doesn't comply with the datasheet? Probably a counterfeit. Behaves systematically different from known authentic chips? Probably a counterfeit.
 
 ## What do they look like?
 ![Authentic Maxim DS18B20 with topmark DALLAS DS18B20 1932C4 +786AB and indent marked "P"](images/Maxim_DS18B20_chip_front_reverse.jpg)
@@ -34,8 +34,10 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 * The marking inside the indent on the rear of the case is
 	+ ``P`` (Philippines?) on all chips 2016 through 2019, on most chips in 2020 *(2020)*, and on most(?) chips going back at least as far as 2009 \[5\].
 	+ ``THAI <letter>`` (Thailand?) where ``<letter>`` is one of ``I``, ``J``, ``K``, ``L``, ``M``, ``N``, ``O``, ``S``, ``T``, ``U``, ``V``, ``W``, ``X`` and possibly others, at least on some chips produced in 2011 \[5\]. The ``<letter>`` uses a different font than the letters making up ``THAI``.
-	+ possibly additional markings since 2020 (cf. Issue [21](https://github.com/cpetrich/counterfeit_DS18B20/issues/21)) *(2020)*
+	+ possibly additional markings or no markings on some chips since 2020 (cf. Issue [21](https://github.com/cpetrich/counterfeit_DS18B20/issues/21), Issue [22](https://github.com/cpetrich/counterfeit_DS18B20/issues/22)) *(2020)*
 * From what I've seen on the TO-92 package, there is exactly one batch code associated with a date code for chips marked ``P`` in the indent \[5\]. This does not hold true for chips marked ``THAI`` in the indent \[5\].
+
+*To avoid confusion: the relevant Maxim part number of the chips investigated here is ``DS18B20+``, i.e. TO-92 package and RoHS compliant. Not everything said on this page may apply to the ``DS18B20+PAR`` parasitic power-only variant (I cannot tell since I have only looked at a handfull of those). For the sake of brevity, the chips are referred to as ``DS18B20`` as written in the datasheet \[1\].*
 
 ## How do I know if I am affected?
 If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
@@ -219,7 +221,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1832C4 +827AH
 - Example topmark: DALLAS 18B20 1833C4 +058AA
 - Example topmark: DALLAS 18B20 1908C4 +887AB
-- Example topmark: DALLAS 18B20 1912C4 +001AC (*NB: this date/batch combination is also used on genuie chips \[5\]*)
+- Example topmark: DALLAS 18B20 1912C4 +001AC (*NB: this date/batch combination is also used on genuine chips \[5\]*)
 - Example topmark: DALLAS 18B20 2012C4 +887AB *(2020)*
 - Example topmark: 7Q-Tek 18B20 1861C02
 - Indent mark: *none*
@@ -280,7 +282,7 @@ The chips follow the description of Family A1 above with the following exception
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB \[5\].
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
 * Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
-* Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuie chips \[5\].
+* Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuine chips \[5\].
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
 
@@ -320,7 +322,7 @@ The chips follow the description of Family A1 above with the following exception
 	(some older chips (pre-2009) had buggy hardware circuits (dies), most infamously the ``B7`` die \[4\], cf. Issue [19](https://github.com/cpetrich/counterfeit_DS18B20/issues/19)).
 
 ## Solution to the 85 °C-Problem
-There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuie temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
+There is a simple, undocumented, way to discriminate between the power-up 85 °C-reading and a genuine temperature reading of 85 °C in DS18B20 of Family A \[5\]: ``<byte 6>`` of the scratchpad register. If it is ``0x0c``, then the 85 °C-reading is a power-up reading, otherwise it is a true temperature measurement.
 
 ## GXCAS 18B20
 The DS18B20 clone of Beijing Zhongke Galaxy Core Technology Co., Ltd., trading as GXCAS, seems to be distributed independently by GXCAS and UMW (Family B1). According to their web page, GXCAS has only been around since January 2018. While GXCAS does not have a datasheet online, the datasheet on the UMW web page emphasizes the addition of two user-defined bytes in the scratchpad register, and the possibility of changing the ROM address \[14\]. A number of these chips bear fake DS18B20 topmarks. GXCAS is clearly proud of their product as they write their company name prominently onto the die.
@@ -373,7 +375,7 @@ An ideal sensors would only show discretization noise, i.e. have readings fluctu
 The time required for temperature data conversion is specified as maximum 750 ms in the datasheet (12 bit conversion). The actual time required has (at a given temperature) a well-reproducible, characteristic value for each sensor. This time is shown in plot (c). Family A1 takes around 600 ms for a conversion, while Families A2 and B show a comparatively large inter-sensor variability. Families C and D1 are remarably fast at 30 and 11 ms, respectively, while Family D2 takes around 500 ms or a little less. Although all sensors we measured were faster than 750 ms at room temperature, some sensors of Family B got close to the limit.
 
 ## Warning
-**Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuie sensors, we have not come across sensors with spoofed ROM \[5\].)
+**Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuine sensors, we have not come across sensors with spoofed ROM \[5\].)
 
 (*Information on chips of Families A, B, C, and D comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10\]. All tests were performed at 5 V with 1.2 kOhm pull-up. Decapping was performed jointly with Nga P. Dang, and measurements of temperature offsets and timing with Irina Sæther and Megan O'Sadnick.*)
 
