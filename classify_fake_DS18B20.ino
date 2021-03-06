@@ -312,7 +312,7 @@ void loop() {
       uint8_t r93 = one_byte_return(addr, 0x93);
       if (r68 != 0xff) {        
         int cpp = curve_param_prop(addr);
-        if (cpp == 1) Comm.print(F(" Family A1 (Genuie Maxim).")); // unsigned and 3.8 oC range
+        if (cpp == 1) Comm.print(F(" Family A1 (Genuine Maxim).")); // unsigned and 3.8 oC range
         else if (cpp == 2) Comm.print(F(" Family A2 (Clone).")); // signed and 32 oC range
         else if (cpp == -3) Comm.print(F(" (Error reading scratchpad register [A].)"));
         else if (cpp == -1) {
