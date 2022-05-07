@@ -273,7 +273,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Indent mark: *none*
 
-### Family D2: Noisy Rubbish
+### Family D2: XSEC SE18B20, Noisy
 ***Obtained both probes and chips from a large number of vendors in 2019***
 * ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc, 28-tt-tt-56-B5-ss-ss-crc *(2020)*, 28-tt-tt-07-D6-ss-ss-crc *(2020)*
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
