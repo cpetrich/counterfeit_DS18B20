@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 21 Feb 2021.
+> Author: Chris Petrich, 8 May 2022.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -300,6 +300,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1943C4 +051AG
 - Example topmark: DALLAS 18B20 1828C4 +233AA
 - Example topmark: DALLAS 18B20 2008C4 +817AB *(2020)*
+- Example topmark: SE18B20 2130 *(2022)*
 - Indent mark: *none*
 
 ### Obsolete as of 2019
@@ -334,6 +335,9 @@ While it is unclear who designed or produced chips of Family A2, Family A2 appea
 * The QT18B20 datasheet claims that a temperature conversion takes <500 ms \[12\]. This is consistent with the actual behavior of Family A2. (While the UMW datasheet claims the same \[14\], one of the datasheets appears to have been used as a template for the other.)
 * According to the datasheet version history, the earliest version of the QT18B20 datasheet did not mention user-defined bytes \[12\]. Family A2 does not have user-defined bytes in the scratchpad register.
 * The die ciruit of Family A2 resembles the style of both the die of Family A1 (produced by Maxim) and the die of Family B2 (produced by 7Q-Tek). The die size is significantly different from Family A1, so it's not a Maxim-produced DS18B20.
+
+## XSEC SE18B20
+The SE18B20 is a DS18B20 clone of Xi'an Supermicro Electronics Co., Ltd., trading as XSEC (Family D2). *(2022)*
 
 ## MAX31820
 Maxim Integrated also produce the MAX31820 temperature sensor. The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A1 and Maxim-produced MAX31820 in software \[5\].
@@ -385,7 +389,7 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 **Official Distributors:** Maxim Integrated, Digikey, Farnell, Mouser, RS Components
 **ebay:** 5hk1584, alice1101983, alphago-it, andnov73, areyourshop-003, b2cpowershop2010, bernard_netelectroshop, binggogo, careforyou123, cheaptronic24, christians-technik-shop, czb6721960, d-9845, deepenmind, diy-arduino, diybox, eckstein-komponente, enigma-component-shop, e\*shine, efectronics, ele-parts, fr_aurora, fzeroinestore, geekapparels, good-module, happybuddhatrading, hermann_shopp, icmarket2009, jk_parts, justpro, kingelectronics15, london_shoppings_1, lovesell2013, lucas89-8, makershop, mecklenburg8, modul_technik, moore_estates, nouteclab, \*orchid, polida2008, puretek-innovations, rammie_74, scuary1, sensesmart, sensus, sevenshop888, shenglongsi, sparco888, survy2014, tancredielettronica, umtmedia, worldchips, xiaolin4, xuan33_store, yantzlf
 **AliExpress:** All goods are free shipping Store, AOKIN DiyMaker, Cuiisw Module Store, Eiechip, Fantasy Electronic, FSXSEMI, Great-IT, Great Wall Electronics, HWA YEH, Liyuan Electronic, Mega Semiconductor, Red Yellow Store, RoarKit Store, Sensor World, SHENGSUN Sensor, Shenzhen High Quality Products, shop912692, TENSTAR, WAVGAT, Win win., YLGA, YX Electronic
-**Other:** Adafruit, AZ-Delivery, Banggood, Taizhou Best Electric Equipment, Conrad Electronic, DFRobot, DROK,  Elektroimportøren, Elfa Distrelec, Shanghai Jiutian Automation Equipment, Kjell & Company, LCSC, Dongguan Nangudi Electronics, Quest Components, Shenzhen RBD Sensor Technology, Reichelt Elektronik, Shenzhen Senstech Electronic Technology, SparkFun, TELMAL, Dongguan Tianrui Electronics, YourDuino
+**Other:** Adafruit, AZ-Delivery, Banggood, Taizhou Best Electric Equipment, Conrad Electronic, DFRobot, DROK,  Elektroimportøren, Elfa Distrelec, Shanghai Jiutian Automation Equipment, Kjell & Company, LCSC, Dongguan Nangudi Electronics, Quest Components, Shenzhen RBD Sensor Technology, Reichelt Elektronik, Shenzhen Senstech Electronic Technology, SparkFun, Tayda Electronics, TELMAL, Dongguan Tianrui Electronics, YourDuino
 
 ## References
 
