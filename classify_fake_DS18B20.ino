@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Chris Petrich
+ * Copyright 2024 Chris Petrich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  *   
  *   File:    classify_fake_DS18B20.ino
  *   Author:  Chris Petrich
- *   Version: 25 May 2020
+ *   Version: 18 Mar 2024
  *   
  *   Source:  https://github.com/cpetrich/counterfeit_DS18B20/
  *   Documentation:  https://github.com/cpetrich/counterfeit_DS18B20/
@@ -317,7 +317,7 @@ void loop() {
         else if (cpp == -3) Comm.print(F(" (Error reading scratchpad register [A].)"));
         else if (cpp == -1) {
           Comm.print(F(" Family A, unknown subtype (0x93="));
-          print_hex(one_byte_return(addr, 0x93));
+          print_hex(r93);
           Comm.print(F(", 0x68="));
           print_hex(r68);
           Comm.print(F(")."));
