@@ -15,7 +15,7 @@
  *   
  *   File:    classify_fake_DS18B20.ino
  *   Author:  Chris Petrich
- *   Version: 18 Mar 2024
+ *   Version: 19 Mar 2024
  *   
  *   Source:  https://github.com/cpetrich/counterfeit_DS18B20/
  *   Documentation:  https://github.com/cpetrich/counterfeit_DS18B20/
@@ -307,6 +307,30 @@ void loop() {
     
     int identified = 0;
 
+    { // test for family E, added 19 March 2024
+      uint8_t sp21, sp22;
+      uint8_t sp21b, sp22b;
+      ds->reset();
+      ds->select(addr);
+      ds->write(0xDE);
+      sp21 = ds->read();
+      sp22 = ds->read();
+      ds->reset();
+      ds->select(addr);
+      ds->write(0x2E);
+      ds->write(~sp21);
+      ds->write(~sp22);
+      ds->reset();
+      ds->select(addr);
+      ds->write(0xDE);
+      sp21b = ds->read();
+      sp22b = ds->read();
+      if ((sp21b == ~sp21) && (sp22b == ~sp22)) {
+        Comm.print(F(" Family E (Clone)."));
+        identified++;
+      }
+    }
+    
     { // test for family A
       uint8_t r68 = one_byte_return(addr, 0x68);
       uint8_t r93 = one_byte_return(addr, 0x93);
