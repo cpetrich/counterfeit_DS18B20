@@ -91,7 +91,7 @@ void setup() {
   
   {
     // output file name without leading path
-    char *file = __FILE__;
+    auto *file = __FILE__;
     int i;
     for (i = strlen(file); i > 0; i--)
       if ((file[i] == '\\') || (file[i] == '/')) {
@@ -273,8 +273,7 @@ void loop() {
 
     Comm.print("  Checking byte 6 upon temperature change: ");
     if (( ((buffer2[0] == 0x50) && (buffer2[1] == 0x05)) || ((buffer2[0] == 0xff) && (buffer2[1] == 0x07)) ||
-         ((buffer2[6] == 0x0c) && (((buffer2[0] + buffer2[6]) & 0x0f) == 0x00)) ) &&
-         ((buffer2[6] >= 0x00) && (buffer2[6] <= 0x10)) ){
+         ((buffer2[6] == 0x0c) && (((buffer2[0] + buffer2[6]) & 0x0f) == 0x00)) ) && (buffer2[6] <= 0x10) ){
       // byte 6 checked out as correct in the initial test but the test ambiguous.
       //   we need to check if byte 6 is consistent after temperature conversion
             
