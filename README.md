@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
-...unless you bought the chips directly from [Maxim Integrated](https://www.maximintegrated.com/en/products/sensors/DS18B20.html) (or Dallas Semiconductor in the old days), an [authorized distributor](https://www.maximintegrated.com/en/aboutus/contact-us/distributor-offices.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
+...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 8 May 2022.
+> Author: Chris Petrich, 14 Aug 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -175,9 +175,9 @@ The chips follow the description of Family A1 above with the following exception
 * ROM patterns \[5\]:
 	- 28-AA-tt-ss-ss-ss-ss-crc (GXCAS-branded)
 	- 28-tt-tt-ss-ss-ss-ss-crc (UMW-branded)
-* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
+* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\]. (*update 2024*: apparently, the most recent series of this family have addressed this, cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 * DS18B20 write scratchpad-bug (0x4E) / UMW scratchpad \[5,12,14\]:
-	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
+	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent, (*update 2024*: apparently, the most recent series of this family have addressed this, cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 	- if 5 data bytes are sent (as per UMW datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. (The UMW datasheet states that the ROM code can be changed but does not specify how \[14\].) Family code (``0x28``) cannot be changed \[5\].
@@ -188,6 +188,7 @@ The chips follow the description of Family A1 above with the following exception
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
+- Example ROM: 28-E4-FA-2F **-57-23-0B-** AF *(2024)* (cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1804C4 +051AG
