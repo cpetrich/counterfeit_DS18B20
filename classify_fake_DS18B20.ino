@@ -308,8 +308,8 @@ void loop() {
     int identified = 0;
 
     { // test for family E, added 19 March 2024
-      uint8_t sp21, sp22;
-      uint8_t sp21b, sp22b;
+      uint32_t sp21, sp22;
+      uint32_t sp21b, sp22b;
       ds->reset();
       ds->select(addr);
       ds->write(0xDE);
