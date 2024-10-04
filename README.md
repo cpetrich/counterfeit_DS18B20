@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 14 Aug 2024.
+> Author: Chris Petrich, 4 Oct 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -246,7 +246,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1924C4 +158AC
 - Indent mark: *none*
 
-### Family D1: Noisy Rubbish with Supercap
+### Family D1: Noisy Rubbish with Big Cap
 ***Obatined probes from two vendors in early 2019, obtained chips from one vendor in 2019***
 * ROM patterns \[5\]: 28-tt-tt-77-91-ss-ss-crc and 28-tt-tt-46-92-ss-ss-crc
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
@@ -274,7 +274,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Indent mark: *none*
 
-### Family D2: XSEC SE18B20, Noisy
+### Family D2: Interesting, Noisy
 ***Obtained both probes and chips from a large number of vendors in 2019***
 * ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc, 28-tt-tt-56-B5-ss-ss-crc *(2020)*, 28-tt-tt-07-D6-ss-ss-crc *(2020)*
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
@@ -354,8 +354,8 @@ While it is unclear who designed or produced chips of Family A2, Family A2 appea
 * According to the datasheet version history, the earliest version of the QT18B20 datasheet did not mention user-defined bytes \[12\]. Family A2 does not have user-defined bytes in the scratchpad register.
 * The die ciruit of Family A2 resembles the style of both the die of Family A1 (produced by Maxim) and the die of Family B2 (produced by 7Q-Tek). The die size is significantly different from Family A1, so it's not a Maxim-produced DS18B20.
 
-## XSEC SE18B20
-The SE18B20 is a DS18B20 clone of Xi'an Supermicro Electronics Co., Ltd., trading as XSEC (Family D2, and most likely also D1). *(2022)*
+## Mysentech MY18E20
+The MY18E20 clone of Minyuan Sensing Technology, trading as Mysentech, appears to be the sensor of Family D2. Family D1 is probably a variant also produced by Mysentech. Mysentech has a datasheet that seems to be largely consistent with the behavior of this chip \[15\] and they have technical FAQ pages related to this sensor (dated December 2022) \[16\]. Apparently, Mysentech was founded in 2017. *(2024)*
 
 ## NOVOSENSE NS18B20
 The NS18B20 is a DS18B20 clone of Suzhou Novosense Microelectronics Co., Ltd. (Family E). *(2022)*
@@ -428,3 +428,5 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 12. [QT18B20](http://www.leoniv.diod.club/articles/ds18x20/downloads/qt18b20.pdf) "QT18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet Rev 061713, 7Q Technology.
 13. [AIR6273](https://www.sae.org/standards/content/air6273/) "Terms, Definitions, and Acronyms Counterfeit Materiel or Electrical, Electronic, and Electromechanical Parts", SAE Aerospace Information Report, July 2019.
 14. [UMW DS18B20](https://datasheet.lcsc.com/szlcsc/1911131832_Youtai-Semiconductor-Co-Ltd-DS18B20_C376006.pdf) UMW DS18B20 datasheet.
+15. [MY18E20](http://www.mysentech.com/) Mysentech home page (English) with link to datasheets.
+16. [MY18E20 FAQ](http://www.mysentech.com/newsinfo/4808140.html) Mysentech FAQ (Chinese).
