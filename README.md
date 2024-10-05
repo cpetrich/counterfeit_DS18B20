@@ -16,6 +16,8 @@ There are two Arduino sketches provided to test DS18B20 sensors:
 * ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
 * ``classify_fake_DS18B20.ino`` is a minimal implementation matching a sensor to a specific Family (see below) based on the response to undocumented function codes. Output is specific but rather boring. Use at your own risk.
 
+(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families on this page anymore.)
+
 Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
 
 ## Why should I care?
@@ -181,9 +183,9 @@ The chips follow the description of Family A1 above with the following exception
 * ROM patterns \[5\]:
 	- 28-AA-tt-ss-ss-ss-ss-crc (GXCAS-branded)
 	- 28-tt-tt-ss-ss-ss-ss-crc (UMW-branded)
-* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\]. (*update 2024*: apparently, the most recent series of this family have addressed this, cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
+* Scratchpad register ``<byte 6>`` does not change with measured temperature (default ``0x0c``) \[5\].
 * DS18B20 write scratchpad-bug (0x4E) / UMW scratchpad \[5,12,14\]:
-	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent, (*update 2024*: apparently, the most recent series of this family have addressed this, cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
+	- If 3 data bytes are sent (as per DS18B20 datasheet, TH, TL, Config) then ``<byte 6>`` changes to the third byte sent,
 	- if 5 data bytes are sent (as per UMW datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. (The UMW datasheet states that the ROM code can be changed but does not specify how \[14\].) Family code (``0x28``) cannot be changed \[5\].
@@ -194,7 +196,6 @@ The chips follow the description of Family A1 above with the following exception
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
 - Example ROM: 28-AB-9C-B1 **-33-14-01-** 81
-- Example ROM: 28-E4-FA-2F **-57-23-0B-** AF *(2024)* (cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1804C4 +051AG
@@ -203,6 +204,28 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1926C4 +926AC *(2020)*
 - Example topmark: GXCAS 18B20E 1847D02
 - Example topmark: UMW 18B20 1935C4
+- Indent mark: *none*
+
+### Family B1-v2: Why this Update?
+***Obtained chips in 2024, also see Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40)***
+
+*These chips seem to have appeared on the market ca. 2024 as reported in Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40). While the undocumented features seem to match those of Family B1, the behavior of the scratchpad register has changed to better match Family A1.*
+
+* ROM patterns \[5\]: 28-tt-tt-ss-ss-ss-ss-crc
+* Differences from Family B1:
+	- Scratchpad register ``<byte 6>`` acts like Family A1. I.e., ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``, \[5\] and Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40).
+	- Writing of alarm registers and configuration register do not pollute other values in scratchpad register, \[5\] and Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40).
+	- Scratchpad register does not store User Bytes if 5 data bytes are sent, i.e. ``<byte 7>`` is fixed at ``0x10``. \[5\].
+* Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
+* ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. Family code (``0x28``) cannot be changed \[5\].
+* Polling after function code 0x44 indicates around 650 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+
+- Example ROM: 28-E4-FA-2F **-57-23-0B-** AF (cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
+- Example ROM: 28-0D-72-9A **-20-23-07-** C3
+- Example ROM: 28-94-77-5F **-33-23-09-** 37
+- Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Example topmark: GXCAS 18B20T 2310006
+- Example topmark: XINBOLE DS18B20 2310C4 +3E1AC
 - Indent mark: *none*
 
 ### Family B2: 7Q-Tek QT18B20 with -0.5 °C Temperature Offset at 0 °C
