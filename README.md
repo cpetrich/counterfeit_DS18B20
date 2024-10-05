@@ -12,9 +12,11 @@ If the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx then the DS18B20 
 
 However, the ROM pattern is not a sufficient test for authenticity. Case in point, if the pattern is 28-xx-xx-xx-00-00-00-xx and the topmark specifies die ``C4`` then the sensor is a clone because that ROM pattern pre-dates the ``C4`` die, cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42). *(2024)*
 
-Also, there are two Arduino sketches provided to test DS18B20 sensors:
+There are two Arduino sketches provided to test DS18B20 sensors:
 * ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
 * ``classify_fake_DS18B20.ino`` is a minimal implementation matching a sensor to a specific Family (see below) based on the response to undocumented function codes. Output is specific but rather boring. Use at your own risk.
+
+Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
 
 ## Why should I care?
 Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level, temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
