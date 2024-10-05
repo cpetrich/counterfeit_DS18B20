@@ -278,14 +278,19 @@ The chips follow the description of Family A1 above with the following exception
 ***Obtained both probes and chips from a large number of vendors in 2019***
 * ROM patterns \[5\]: 28-tt-tt-79-97-ss-ss-crc, 28-tt-tt-94-97-ss-ss-crc, 28-tt-tt-79-A2-ss-ss-crc, 28-tt-tt-16-A8-ss-ss-crc, 28-tt-tt-56-B5-ss-ss-crc *(2020)*, 28-tt-tt-07-D6-ss-ss-crc *(2020)*
 * Scratchpad register ``<byte 7> == 0x66``, ``<byte 6> != 0x0c`` and ``<byte 5> != 0xff`` \[5\].
+	+ ``<byte 7>`` can have other values, including 0xAA or 0x00, \[5\] and Discussion [36](https://github.com/cpetrich/counterfeit_DS18B20/discussions/36). *(2024)*
+	+ Scratchpad registers ``<byte 5>``, ``<byte 6>``, and ``<byte 7>`` can be written with function code 0x66 \[15\]. *(2024)*
 * Does not return data on undocumented function code 0x68 \[5\]. Responds back with data or status information after codes 
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB, 0xDD (3 bytes), 0xEE (3 bytes) \[5\], or
 	+ 0x4D, 0x8B (9 bytes), 0xBA, 0xBB \[5\].
 * First byte following undocumented function code 0x8B is ``0x00`` \[5\].
+* Undocumented function code 0x8B queries an undocumented 9-byte configuration register, with many of those bytes affecting the temperature reading \[5\]. Undocumented function code 0xAB is used to update the 9 bytes of this configuration register \[5\]. *(2024)*
+* A 14-bit temperature mode \[15\] can be enabled by setting ``<bit 0>`` of ``<byte 0>`` in the undocumented configuration register \[5\]. *(2024)*
 * Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuine chips \[5\].
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
+	+ Default alarm register settings differ from Family A1 (``0x00`` and ``0x00``), \[5\] and Discussion [36](https://github.com/cpetrich/counterfeit_DS18B20/discussions/36). *(2024)*
 
 - Example ROM: 28-90-FE-79 **-97-** 00-03-20
 - Example ROM: 28-FD-58-94 **-97-** 14-03-05
@@ -293,7 +298,9 @@ The chips follow the description of Family A1 above with the following exception
 - Example ROM: 28-29-7D-16 **-A8-** 01-3C-84
 - Example ROM: 28-DF-54-56 **-B5-** 01-3C-F5 *(2020)*
 - Example ROM: 28-AF-EC-07 **-D6-** 01-3C-0A *(2020)*
+- Example ROM: 28-75-02-80 **-33-** 8B-06-DC *(2024)*
 - Initial Scratchpad: 90/01/55/05/7F/xx/xx/66/xx
+- Initial Scratchpad: 90/01/00/00/7F/xx/xx/xx/xx *(2024)*
 - Example topmark: DALLAS 18B20 1812C4 +051AG
 - Example topmark: DALLAS 18B20 1827C4 +051AG
 - Example topmark: DALLAS 18B20 1916C4 +051AG
@@ -302,6 +309,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1828C4 +233AA
 - Example topmark: DALLAS 18B20 2008C4 +817AB *(2020)*
 - Example topmark: SE18B20 2130 *(2022)*
+- Example topmark: MY18B20 S380 *(2024)*
 - Indent mark: *none*
 
 ### Family E: NOVOSENSE NS18B20
