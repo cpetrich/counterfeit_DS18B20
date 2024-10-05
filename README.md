@@ -192,6 +192,7 @@ The chips follow the description of Family A1 above with the following exception
 * Substitutes ``0x0c`` for actual value of ``<byte 6>`` if scratchpad register is read before temperature conversion has finished in parasitic power mode.
 * Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 * The die has "GXCAS" written on it.
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
@@ -219,6 +220,7 @@ The chips follow the description of Family A1 above with the following exception
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x22`` \[5\].
 * ROM code can be changed in software with command sequence "96-Cx-Dx-94" \[5\]. Family code (``0x28``) cannot be changed \[5\].
 * Polling after function code 0x44 indicates around 650 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 
 - Example ROM: 28-E4-FA-2F **-57-23-0B-** AF (cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 - Example ROM: 28-0D-72-9A **-20-23-07-** C3
@@ -241,6 +243,7 @@ The chips follow the description of Family A1 above with the following exception
 * Substitutes ``0x0c`` for actual value of ``<byte 6>`` if scratchpad register is read before temperature conversion has finished in parasitic power mode.
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 587-697 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 * The die has "7Q-Tek" written on it (using the Chinese character for digit 7).
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
@@ -346,18 +349,22 @@ The chips follow the description of Family A1 above with the following exception
 - Indent mark: *none*
 
 ### Family E: NOVOSENSE NS18B20
-***Obtained neither chips nor probes in 2019. Bought chips clearly marked NS18B20 in 2022***
+***Obtained neither chips nor probes in 2019. Bought chips clearly marked NS18B20 in 2022 and 2024***
 
-*This family has been added to the list as of 2022 and the characterization below is preliminary. The datasheet seems to suggest that the chips started production in 2019.*
+*This family has been added to the list as of 2022. The datasheet seems to suggest that the chips started production in 2019.*
 
-* ROM patterns \[5\]: 28-00-tt-tt-59-43-ss-crc
-* Scratchpad register ``<byte 6>`` acts like Family A1. I.e., ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``.
-* The NS18B20 datasheet documents commands supporting a second scratchpad register designed to provide 2 byte EEPROM storage.
+* ROM patterns \[5\]: 28-00-tt-tt-ss-ss-ss-crc
+* Scratchpad register ``<byte 6>`` is **always** ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``, i.e. unlike Family A1 ``<byte 6> = 0x10`` is the value at power-up \[5\].
+* Returns two-byte Custom Scratchpad on function code 0xDE and signals busy during write to EEPROM on function code 0x28 \[5\], as specified in the NS18B20 datasheet \[17\].
 * Does not return data on undocumented function codes 0x68 and 0x93.
-* 12 bit temperature conversion in 20 to 25 ms. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
+* Temperature conversion is 20 to 25 ms, independent of the selected resolution \[5\]. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 
 - Example ROM: 28 **-00-** 74-28 **-59-43-** 0F-7A
+- Example ROM: 28 **-00-** 2A-50 **-0C-41-** 02-DB
+- Initial Scratchpad: 50/05/4B/46/7F/FF/10/10/BD
 - Example topmark: NS18B20 203B00
+- Example topmark: NS18B20 412D01
 - Indent mark: *none*
 
 ### Obsolete as of 2019
@@ -471,3 +478,4 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 14. [UMW DS18B20](https://datasheet.lcsc.com/szlcsc/1911131832_Youtai-Semiconductor-Co-Ltd-DS18B20_C376006.pdf) UMW DS18B20 datasheet.
 15. [MY18E20](http://www.mysentech.com/) Mysentech home page (English) with link to datasheets.
 16. [MY18E20 FAQ](http://www.mysentech.com/newsinfo/4808140.html) Mysentech FAQ (Chinese).
+17. [NS18B20](https://www.novosns.com/en/temperature-sensor-1691) "High-precision Single-BUS Digital Temperature Sensor", NS18B20 Datasheet Rev. 1.0, Novosense.
