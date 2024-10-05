@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 4 Oct 2024.
+> Author: Chris Petrich, 5 Oct 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -9,6 +9,8 @@
 
 ## TLDR; How do I know?
 If the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx then the DS18B20 sensor is a clone \[5\].
+
+However, the ROM pattern is not a sufficient test for authenticity. Case in point, if the pattern is 28-xx-xx-xx-00-00-00-xx and the topmark specifies die ``C4`` then the sensor is a clone because that ROM pattern pre-dates the ``C4`` die, cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42). *(2024)*
 
 Also, there are two Arduino sketches provided to test DS18B20 sensors:
 * ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
@@ -116,8 +118,10 @@ Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other famili
 * It appears the chip returns a temperature of 127.94 °C (=0x07FF / 16.0) if a temperature conversion was unsuccessful \[5\] (e.g. due to power stability issues which arise reproducibly in "parasitic power" mode with *multiple* DS18B20 if Vcc is left floating rather than tied to ground. Note that the datasheet clearly states that Vcc is to be tied to GND in parasitic mode.).
 
 - Example ROM: 28-13-9B-BB-0B **-00-00-** 1F
+- Example ROM: 28-CA-D6-10-10 **-00-00-** FE *(2024)*
 - Initial Scratchpad: **50**/**05**/4B/46/**7F**/**FF**/0C/**10**/1C
 - Example topmark: DALLAS 18B20 1932C4 +786AB
+- Example topmark: DALLAS 18B20 2411C4 +852AD *(2024)*
 - Indent mark: ``P`` (date codes 1150 through 2019)
 - Indent mark: possibly options besides ``P`` since 2020 (cf. Issue [21](https://github.com/cpetrich/counterfeit_DS18B20/issues/21)) *(2020)*
 
@@ -208,13 +212,16 @@ The chips follow the description of Family A1 above with the following exception
 	- if 5 data bytes are sent (as per QT18B20 datsheet, TH, TL, Config, User Byte 3, User Byte 4), the last two bytes overwrite ``<byte 6>`` and ``<byte 7>``, respectively.
 * Does not return data on undocumented function code 0x68 \[5\]. Does return data from codes 0x90, 0x91, 0x92, 0x93, 0x95, and 0x97 \[5\]. Return value in response to 0x97 is ``0x31`` \[5\].
 * ROM code **cannot** be changed in software with command sequence "96-Cx-Dx-94" \[5\].
+* In at least some more recent samples, the default alarm register settings differ from Family A1 (``0x55`` and ``0x00``) \[5\]. *(2024)*
 * Substitutes ``0x0c`` for actual value of ``<byte 6>`` if scratchpad register is read before temperature conversion has finished in parasitic power mode.
 * Typical temperature offset at at 0 °C is -0.5 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 587-697 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * The die has "7Q-Tek" written on it (using the Chinese character for digit 7).
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
+- Example ROM: 28 **-FF-** E8-E8-54-E2-1F-24 *(2024)*
 - Initial Scratchpad: 50/05/4B/46/7F/FF/0C/10/1C
+- Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21 *(2024)*
 - Example topmark: DALLAS 18B20 1626C4 +233AA
 - Example topmark: DALLAS 18B20 1702C4 +233AA
 - Example topmark: DALLAS 18B20 1810C4 +138AB
@@ -225,6 +232,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1912C4 +001AC (*NB: this date/batch combination is also used on genuine chips \[5\]*)
 - Example topmark: DALLAS 18B20 2012C4 +887AB *(2020)*
 - Example topmark: 7Q-Tek 18B20 1861C02
+- Example topmark: 18B20 2214 *(2024)*
 - Indent mark: *none*
 
 ### Family C: Small Offset at 0 °C
