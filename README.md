@@ -16,7 +16,7 @@ There are two Arduino sketches provided to test DS18B20 sensors:
 * ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
 * ``classify_fake_DS18B20.ino`` is a minimal implementation matching a sensor to a specific Family (see below) based on the response to undocumented function codes. Output is specific but rather boring. Use at your own risk.
 
-(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families on this page anymore.)
+(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families B1-v2 and E-H on this page. Also, much of the content of this page does not yet account for those families.)
 
 Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
 
