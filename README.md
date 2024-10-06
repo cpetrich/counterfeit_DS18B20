@@ -412,6 +412,28 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: HT18B20 ARTZ #465142
 - Indent mark: *none*
 
+### Family H: Watch Out!
+***Obtained neither chips nor probes in 2019. Bought chips in 2024, also observed in the wild (cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))***
+
+*This family was added to the list in 2024.*
+
+* ROM patterns \[5\]: 28-tt-tt-tt-00-00-00-crc
+	- Note that genuine chips with this ROM pattern were produced over 15 years ago.
+	- Note that a ROM of this pattern predates the ``C4`` die. I.e., a chip with a topmark DALLAS 18B20 and ``C4`` die together with this ROM is not genuine.
+* Scratchpad register ``<byte 6> = 0x0C`` at power-up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
+* Does not return data on undocumented function code 0x93 but returns data on undocumented function code 0x68, \[5\].
+* Default alarm register settings differ from Family A1 (``0x7F`` and ``0x80``) \[5\].
+* Polling for completion of the temperature conversion produces valid readings only after a slight delay (&leq; 1 ms) following the initation of temperature conversion, \[5\]. This contrasts with sensors of Families A-G that indicate without delay (if applicable).
+	- Delayed polling after function code 0x44 indicates approx. 589-621 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+
+- Example ROM: 28-3E-43-87 **-00-00-00-** 18 *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
+- Example ROM: 28-CA-BA-61 **-00-00-00-** A3
+- Example ROM: 28-06-64-2B **-00-00-00-** 46
+- Initial Scratchpad: 50/05/7F/80/7F/FF/0C/10/93
+- Example topmark: DALLAS 18B20 2402C4 +817AB *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
+- Example topmark: HXY 18B20 2340
+- Example topmark: MSKSEMI 18B20 2420
 
 ### Obsolete as of 2019
 ***Obtained neither probes nor chips in 2019***
@@ -515,7 +537,7 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 2. [DS18S20](https://datasheets.maximintegrated.com/en/ds/DS18S20.pdf) "DS18S20 High-Precision 1-Wire Digital Thermometer", Datasheet, Maxim Integrated.
 3. [AN4377](https://www.maximintegrated.com/en/design/technical-documents/app-notes/4/4377.html) "Comparison of the DS18B20 and DS18S20 1-Wire Digital Thermometers", Maxim Integrated
 4. AN247 "DS18x20 EEPROM Corruption Issue", Maxim Integrated
-5. Own investigations 2019, unpublished.
+5. Own investigations 2019-2024, unpublished.
 6. Petrich, C., M. O'Sadnick, Ø. Kleven, I. Sæther (2019). A low-cost coastal buoy for ice and metocean measurements. In Proceedings of the 25th International Conference on Port and Ocean Engineering under Arctic Conditions (POAC), Delft, The Netherlands, 9-13 June 2019, 6 pp.
 7. Contribution of user *m_elias* on https://forum.arduino.cc/index.php?topic=544145.15
 8. [MAX31820](https://datasheets.maximintegrated.com/en/ds/MAX31820.pdf) "1-Wire Ambient Temperature Sensor", Datasheet, Maxim Integrated.
