@@ -389,6 +389,30 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: XINBOLE DS18B20T 2430C4 +4F3AC
 - Indent mark: *none*
 
+### Family G: The Joker
+***Obtained neither chips nor probes in 2019. Bought chips in 2024***
+
+*This family was added to the list in 2024.*
+
+* ROM patterns \[5\]: 28-tt-tt-tt-tt-tt-tt-crc (seemingly random)
+* Scratchpad register ``<byte 6> = 0x0C`` at power up, and ``<byte 6> = 0x20 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\]. Yes, they really lie ``0x10`` above Family A1.
+* Returns one byte on undocumented function code 0x8E, \[5\].
+* Does not return data on undocumented function codes 0x68 and 0x93, \[5\].
+* Default alarm register settings differ from Family A1 (``0x55`` and ``0xAA``) \[5\].
+* Contains a large buffer capacitor such that a 100 ms power cycle is too short to reset the scratchpad register, \[5\].
+* Polling after function code 0x44 indicates approx. 227-293 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+
+- Example ROM: 28-C7-9E-A3-59-83-D9-74
+- Example ROM: 28-95-77-37-3F-4A-FB-1F
+- Example ROM: 28-CE-71-E6-6F-8C-E5-3C
+- Initial Scratchpad: 50/05/55/AA/7F/FF/0C/10/AF
+- Example topmark: ZHHXDZ HX18B20 24+6
+- Example topmark: JSMSEMI 18B20 3X31
+- Example topmark: HT18B20 ARTZ #465142
+- Indent mark: *none*
+
+
 ### Obsolete as of 2019
 ***Obtained neither probes nor chips in 2019***
 * ROM patterns \[5,7\]: 28-tt-tt-ss-00-00-80-crc
