@@ -356,7 +356,7 @@ The chips follow the description of Family A1 above with the following exception
 * ROM patterns \[5\]: 28-00-tt-tt-ss-ss-ss-crc
 * Scratchpad register ``<byte 6>`` is **always** ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``, i.e. unlike Family A1 ``<byte 6> = 0x10`` is the value at power-up \[5\].
 * Returns two-byte Custom Scratchpad on function code 0xDE and signals busy during write to EEPROM on function code 0x28 \[5\], as specified in the NS18B20 datasheet \[17\].
-* Does not return data on undocumented function codes 0x68 and 0x93.
+* Does not return data on undocumented function codes 0x68 and 0x93, \[5\].
 * Temperature conversion is 20 to 25 ms, independent of the selected resolution \[5\]. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 
@@ -365,6 +365,28 @@ The chips follow the description of Family A1 above with the following exception
 - Initial Scratchpad: 50/05/4B/46/7F/FF/10/10/BD
 - Example topmark: NS18B20 203B00
 - Example topmark: NS18B20 412D01
+- Indent mark: *none*
+
+### Family F: The Variant
+***Obtained neither chips nor probes in 2019. Bought chips in 2024***
+
+*This family was added to the list in 2024.*
+
+* ROM patterns \[5\]: 28-tt-tt-ss-ss-ss-ss-crc
+* Scratchpad register ``<byte 6> = 0x0C`` fixed, \[5\].
+* Returns three bytes on undocumented function code 0x19, \[5\].
+* Does not return data on undocumented function codes 0x68 and 0x93, \[5\].
+* Extended temperature mode (up to 150 &deg;C) can be enabled by setting ``<bit 7>`` of ``<byte 4>`` in the scratchpad register, \[5\],\[18\].
+* EEPROM not implemented, \[18\].
+* Default alarm register settings differ from Family A1 (``0x55`` and ``0x00``) \[5\].
+* Completion of temperature conversion cannot be polled (functionality not implemented), \[5\],\[18\].
+* Conversion resolution always reported as 12 bit, \[5\].
+* Typical conversion time 27 ms as per datasheet, \[18\].
+* Parasitic power mode does not work with Vcc pulled to GND, \[5\]. Instead, parasitic power mode works with Vcc left floating, \[5\],\[18\].
+
+- Example ROM: 28-03-60 **-00-00-01-** 24-D0
+- Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
+- Example topmark: XINBOLE DS18B20T 2430C4 +4F3AC
 - Indent mark: *none*
 
 ### Obsolete as of 2019
@@ -407,6 +429,9 @@ The MY18E20 clone of Minyuan Sensing Technology, trading as Mysentech, appears t
 
 ## NOVOSENSE NS18B20
 The NS18B20 is a DS18B20 clone of Suzhou Novosense Microelectronics Co., Ltd. (Family E). *(2022)*
+
+## Xinbole DS18B20T
+Shenzhen Xinbole Electronics Co. (XBLW) has a datasheet that accurately describes the somewhat unusual behavior of the sensor of Family F. *(2024)*
 
 ## MAX31820
 Maxim Integrated also produce the MAX31820 temperature sensor. The MAX31820 is a DS18B20 with limited supply voltage range (i.e. up to 3.7 V) and smaller temperature range of high accuracy \[1,8\]. Like the DS18B20, it uses one-wire family code 0x28 \[1,8\]. Preliminary investigations have not (yet) revealed a test to distinguish between DS18B20 of Family A1 and Maxim-produced MAX31820 in software \[5\].
@@ -479,3 +504,4 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 15. [MY18E20](http://www.mysentech.com/) Mysentech home page (English) with link to datasheets.
 16. [MY18E20 FAQ](http://www.mysentech.com/newsinfo/4808140.html) Mysentech FAQ (Chinese).
 17. [NS18B20](https://www.novosns.com/en/temperature-sensor-1691) "High-precision Single-BUS Digital Temperature Sensor", NS18B20 Datasheet Rev. 1.0, Novosense.
+18. DS18B20T Datasheet, Xinbole.
