@@ -324,7 +324,7 @@ void loop() {
       Comm.print(F("Sensor"));
       
     if (fake_flags == 0) {
-      Comm.println(F(" responded like a genuie Maxim."));
+      Comm.println(F(" responded like a genuine Maxim."));
       Comm.println(F("      Not tested: EEPROM, Parasite Power, and undocumented commands."));
     } else {
       Comm.print(F(" appears to be counterfeit based on "));
