@@ -333,7 +333,7 @@ The chips follow the description of Family A1 above with the following exception
 * Undocumented function code 0x8B queries an undocumented 9-byte configuration register, with many of those bytes affecting the temperature reading \[5\]. Undocumented function code 0xAB is used to update the 9 bytes of this configuration register \[5\]. *(2024)*
 * A 14-bit temperature mode \[15\] can be enabled by setting ``<bit 0>`` of ``<byte 0>`` in the undocumented configuration register \[5\]. *(2024)*
 * Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
-* Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuine chips \[5\].
+* 2019: Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuine chips \[5\].
 	+ In 2024, a sample of 10 sensors had an average temperature offset of -0.09 °C at 0 °C with an inter-sensor spread from -0.25 to +0.44 °C, which is a large spread compared to other Families \[5\]. However, individual sensors were not noisier than sensors of other Families. *(2024)*
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
@@ -368,7 +368,7 @@ The chips follow the description of Family A1 above with the following exception
 * Scratchpad register ``<byte 6>`` is **always** ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``, i.e. unlike Family A1 ``<byte 6> = 0x10`` is the value at power-up \[5\].
 * Returns two-byte Custom Scratchpad on function code 0xDE and signals busy during write to EEPROM on function code 0x28 \[5\], as specified in the NS18B20 datasheet \[17\].
 * Does not return data on undocumented function codes 0x68 and 0x93, \[5\].
-* A sample of 10 sensors had an average temperature offset of +0.02 °C at 0 °C with a spread compared to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\]. *(2024)*
+* A sample of 10 sensors had an average temperature offset of +0.02 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\]. *(2024)*
 * Temperature conversion is 20 to 25 ms, independent of the selected resolution \[5\]. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 
@@ -391,7 +391,7 @@ The chips follow the description of Family A1 above with the following exception
 * Extended temperature mode (up to 150 &deg;C) can be enabled by setting ``<bit 7>`` of ``<byte 4>`` in the scratchpad register, \[5\],\[18\].
 * EEPROM not implemented, \[18\].
 * Default alarm register settings differ from Family A1 (``0x55`` and ``0x00``) \[5\].
-* A sample of 10 sensors had an average temperature offset of -0.11 °C at 0 °C with a spread compared to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\]. *(2024)*
+* A sample of 10 sensors had an average temperature offset of -0.11 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\]. *(2024)*
 * Conversion resolution always reported as 12 bit, \[5\].
 * Completion of temperature conversion cannot be polled (functionality not implemented), \[5\],\[18\].
 	+ Typical conversion time 27 ms as per datasheet, \[18\].
@@ -413,7 +413,7 @@ The chips follow the description of Family A1 above with the following exception
 * Does not return data on undocumented function codes 0x68 and 0x93, \[5\].
 * Default alarm register settings differ from Family A1 (``0x55`` and ``0xAA``) \[5\].
 * Contains a large buffer capacitor such that a 100 ms power cycle is too short to reset the scratchpad register, \[5\].
-* A sample of 27 sensors had an average temperature offset of -0.22 °C at 0 °C with a spread compared to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
+* A sample of 27 sensors had an average temperature offset of -0.22 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
 * Polling after function code 0x44 indicates approx. 227-293 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 
@@ -437,7 +437,7 @@ The chips follow the description of Family A1 above with the following exception
 * Scratchpad register ``<byte 6> = 0x0C`` at power-up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
 * Does not return data on undocumented function code 0x93 but returns data on undocumented function code 0x68, \[5\].
 * Default alarm register settings differ from Family A1 (``0x7F`` and ``0x80``) \[5\].
-* A sample of 20 sensors had an average temperature offset of +0.11 °C at 0 °C with a spread compared to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
+* A sample of 20 sensors had an average temperature offset of +0.11 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
 * Polling for completion of the temperature conversion produces valid readings only after a slight delay (&leq; 1 ms) following the initation of temperature conversion, \[5\]. This contrasts with sensors of Families A-G that indicate without delay (if applicable).
 	- Delayed polling after function code 0x44 indicates approx. 589-621 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
