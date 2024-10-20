@@ -326,7 +326,7 @@ The chips follow the description of Family A1 above with the following exception
 * A 14-bit temperature mode \[15\] can be enabled by setting ``<bit 0>`` of ``<byte 0>`` in the undocumented configuration register \[5\]. *(2024)*
 * Sensors **do not work with Parasitic Power**. Sensors draw data line **low** while powered parasitically \[5\].
 * Temperature errors up to 3 °C at 0 °C \[6\]. Data noisier than genuine chips \[5\].
-	+ In 2024, a sample of 10 sensors had an average temperature offset of -0.09 °C at 0 °C with an inter-sensor spread from -0.13 to +0.35 °C, which is a large spread compared to other Families \[5\]. However, individual sensors were not noisier than sensors of other Families. *(2024)*
+	+ In 2024, a sample of 10 sensors had an average temperature offset of -0.09 °C at 0 °C with an inter-sensor spread from -0.25 to +0.44 °C, which is a large spread compared to other Families \[5\]. However, individual sensors were not noisier than sensors of other Families. *(2024)*
 * Polling after function code 0x44 indicates approx. 462-523 ms for conversion regardless of measurement resolution \[5\]. The series with ``97`` and ``A2``/``A8`` in the ROM converts in 494-523 ms and 462-486 ms, respectively \[5\]. Chips with ``A2`` or ``A8`` in byte 4 of the ROM seem to have appeared first in 2019.
 * Initial temperature reading is 25 °C \[5\]. Default alarm register settings differ from Family A1 (``0x55`` and ``0x05``) \[5\].
 	+ Default alarm register settings differ from Family A1 (``0x00`` and ``0x00``), \[5\] and Discussion [36](https://github.com/cpetrich/counterfeit_DS18B20/discussions/36). *(2024)*
