@@ -281,7 +281,7 @@ The chips follow the description of Family A1 above with the following exception
 * Typical temperature offset at 0 °C is +0.05 °C \[6\]. Very little if any temperature discretization noise \[5\].
 * EEPROM endures only about eight (8) write cycles (function code 0x48) \[5\].
 * Reported power mode (parasitic/normal) in response to function code 0xB4 may be wrong, depending on the order power pin and data line are powered (e.g. if power pin is at GND while Data is powered and the power pin is then connected to Vcc, the chip will continue to report parasitic power mode) \[5\].
-* Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasite power mode \[5\].
+* Polling after function code 0x44 indicates 28-30 ms (thirty) for a 12-bit temperature conversion \[5\]. Temperature conversion works also in parasitic power mode \[5\].
 * Operates in 12-bit conversion mode, only (configuration byte reads ``0x7f`` always) \[5\].
 * Default alarm register settings differ from Family A1 (``0x55`` and ``0x00``) \[5\].
 
@@ -559,7 +559,7 @@ Sensors or probes with authentic or cloned DS18B20 were purchased from the follw
 7. Contribution of user *m_elias* on https://forum.arduino.cc/index.php?topic=544145.15
 8. [MAX31820](https://datasheets.maximintegrated.com/en/ds/MAX31820.pdf) "1-Wire Ambient Temperature Sensor", Datasheet, Maxim Integrated.
 9. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet 043001, Dallas Semiconductor, 20pp.
-10. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Preliminary Datasheet 050400, Dallas Semiconductor, 27pp.
+10. DS18B20 "DS18B20 Programmable Resolution 1-Wire Digital Thermometer", Preliminary Datasheet 050400, Dallas Semiconductor, 27pp. ([Wayback Machine](https://web.archive.org/web/20000914041534/http://www.dalsemi.com/datasheets/pdfs/18b20.pdf))
 11. Piecemeal from various blogs and posts.
 12. [QT18B20](http://www.leoniv.diod.club/articles/ds18x20/downloads/qt18b20.pdf) "QT18B20 Programmable Resolution 1-Wire Digital Thermometer", Datasheet Rev 061713, 7Q Technology.
 13. [AIR6273](https://www.sae.org/standards/content/air6273/) "Terms, Definitions, and Acronyms Counterfeit Materiel or Electrical, Electronic, and Electromechanical Parts", SAE Aerospace Information Report, July 2019.
