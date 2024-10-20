@@ -55,28 +55,36 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family C: the sensor is fixed in 12-bit mode (i.e., byte 4 of the scratchpad register is always ``0x7f``)
 * Family C: the number of EEPROM write cycles is very small (order of 10 rather than >50k)
 * Family B1, D1: ROM can be changed in software, i.e. it is not lasered
-* Family A2, B2, D: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
+* Family A2, B2, D1: significant number of sensors with offsets outside the ±0.5 C range at 0 °C
 * Family D: sensor does not respond in parasitic mode (applies to most sensors of Family D)
 * Family D: the temperature reading right after power-up is 25 rather than 85 °C
 * Family D: sensor does not perform low-resolution temperature conversions faster
 * Family D: reserved bytes 5 and 7 of the scratchpad register are not ``0xff`` and ``0x10``, respectively
 * Family D1: retains temperature measurements during power cycles
+* Family E: has custom scratchpad register
+* Family F: completion of temperature conversion cannot be polled
+* Family F: can measure temperatures up to 150 °C (rather than 125 °C)
+* Family H: polling for completion of temperature conversion works only after some delay
 
-Hence, as of writing (2019), every fake sensor available does not comply with the datasheet in at least one way.
+Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Family G.)
 
-Regarding (II), there is one pathetically simple test for differences with Maxim-produced DS18B20 sensors that apparently *all* counterfeit sensors fail \[5\]:
+Regarding (II), there is one pathetically simple test for differences with Maxim-produced DS18B20 sensors that most counterfeit sensors fail \[5\]:
 * It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (Maxim's ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
-Also, with the exception of rare Family A2 and Family E, none of the fake sensors adjust reserved byte 6 in the scratchpad register correctly. Only the fake sensors of Family A2 respond correctly to undocumented function codes regarding the Trim values.
+Only Family H makes an effort to thwart this rule.
+Also, with the exception of rare Family A2 and Families B1v2 and H, none of the fake sensors set reserved byte 6 in the scratchpad register correctly. Only the fake sensors of Family A2 respond correctly to undocumented function codes regarding the Trim values.
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D1
+* 21-23 ms: Family E *(2024)*
 * 28-30 ms: Family C
+* 226-320 ms: Family G *(2024)*
 * 325-505 ms: Family A2
 * 460-525 ms: Family D2
 * 580-615 ms: Family A1
+* 577-626 ms: Family H *(2024)*
 * 585-730 ms: Family B
 
-Hence, there will be some edge cases between Families A and B, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
+Hence, there will be some edge cases between Families A, B and H, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
 
 An important aspect for operation is a sensor's ability to pull the data line low against the fixed pull-up resistor. Turns out this abilitly differs between families. The datasheet guarantees that a sensor is able to sink at least 4 mA at 0.4 V at any temperature up to 125 °C \[1\]. Providing a current of 4 mA (1.2 kOhm pull-up resistor against 5 V), the following ``low`` voltages were achieved by the sensors at room temperature (note that only 5 to 10 sensors were measured per Family):
 * Family A1: 0.058 - 0.062 V
