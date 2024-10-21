@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 20 Oct 2024.
+> Author: Chris Petrich, 21 Oct 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -64,14 +64,14 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family E: has custom scratchpad register
 * Family F: completion of temperature conversion cannot be polled
 * Family F: can measure temperatures up to 150 °C (rather than 125 °C)
-* Family H: polling for completion of temperature conversion works only after some delay
+* Family A3: polling for completion of temperature conversion works only after some delay
 
 Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Family G.)
 
 Regarding (II), there is one pathetically simple test for differences with Maxim-produced DS18B20 sensors that most counterfeit sensors fail \[5\]:
-* It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (Maxim's ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
-Only Family H makes an effort to thwart this rule.
-Also, with the exception of rare Family A2 and Families B1v2 and H, none of the fake sensors set reserved byte 6 in the scratchpad register correctly. Only the fake sensors of Family A2 respond correctly to undocumented function codes regarding the Trim values.
+* It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (They ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
+Only Family A3 makes an effort to thwart this rule.
+Also, with the exception of rare Family A2 and Families A3 and B1v2, none of the clones set reserved byte 6 in the scratchpad register correctly. Only the clones of Family A2 and A3 respond correctly to undocumented function codes regarding the Trim values.
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D1
@@ -81,7 +81,7 @@ In addition to obvious implementation differences such as those listed above und
 * 325-505 ms: Family A2
 * 460-525 ms: Family D2
 * 580-615 ms: Family A1
-* 577-626 ms: Family H *(2024)*
+* 577-626 ms: Family A3 *(2024)*
 * 585-730 ms: Family B
 
 Hence, there will be some edge cases between Families A, B and H, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
@@ -113,7 +113,7 @@ This collage shows photos of the [dies](https://en.wikipedia.org/wiki/Die_(integ
 
 Family A1 is the authentic Maxim-produced DS18B20 (``C4`` die). All other families are clones. Note the similarities between the dies of Families D1 and D2 (consistent with their similarity in software) and the signifcant differences between Families B1 and B2 (as opposed to their similarity in software).
 
-### Family A1: Authentic Maxim DS18B20
+### Family A1: Authentic DS18B20
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from a few vendors in 2019***
 * ROM pattern \[5\]: 28-tt-tt-ss-ss-00-00-crc
 * Scratchpad register:  ``(<byte 0> + <byte 6>) & 0x0f == 0`` after all *successful* temperature conversions, and ``0x00 < <byte 6> <= 0x10`` \[2,3,5\]. I.e., ``<byte 6> = 0x10 – (<byte 0> & 0x0f)``.
@@ -185,6 +185,33 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1808C4 +233AA
 - Example topmark: DALLAS 18B20 1838C4 +233AA  *(2020)*
 - Indent mark: *none*
+
+### Family A3: Designed to Deceive
+***Obtained neither chips nor probes in 2019. Bought chips in 2024, also observed in the wild (cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))***
+
+*This family was added to the list in 2024. It seems to have been specifically designed to pass all tests of the 2019 Arduino sketches on this site. In addition, sensors have the same temperature offset at 0 °C as Family A1, and the same conversion time. However, this Family is distinguished from authentic Family A1 by small differences in the implementation of the temperature calibration and a bug in the reporting of ongoing temperature conversion. It would make me a little bit proud to know that somebody actually designed and mass-produced microchips based on what they read on this site.*
+
+* ROM patterns \[5\]: 28-tt-tt-tt-00-00-00-crc
+	- Note that genuine chips with this ROM pattern were produced over 15 years ago.
+	- Note that a ROM of this pattern predates the ``C4`` die. I.e., a chip with a topmark DALLAS 18B20 and ``C4`` die together with this ROM is not genuine.
+* Scratchpad register ``<byte 6> = 0x0C`` at power-up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
+* Returns data on undocumented function code 0x68 ("Trim2"), \[5\]. Returns data on undocumented function code 0x93 but defaults to ``0xFF`` ("Trim1"), \[5\].
+	+ Curve parameter is unsigned and affects the temperature reading at a similar magnitude as Family A1. \[5\]
+ 		- "Trim2" does not match known values of Family A1. \[5\]
+   	+ Offset parameter is implemented differently than in Family A1. \[5\]
+* Default alarm register settings differ from Family A1 (``0x7F`` and ``0x80``) \[5\].
+* A sample of 20 sensors had an average temperature offset of +0.11 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
+* Polling for completion of the temperature conversion produces valid readings only after a slight delay (&leq; 1 ms) following the initation of temperature conversion, \[5\]. This contrasts with all other sensors of Families A-E and G that implement this feature.
+	- Delayed polling after function code 0x44 indicates approx. 589-621 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
+* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+
+- Example ROM: 28-3E-43-87 **-00-00-00-** 18 *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
+- Example ROM: 28-CA-BA-61 **-00-00-00-** A3
+- Example ROM: 28-06-64-2B **-00-00-00-** 46
+- Initial Scratchpad: 50/05/7F/80/7F/FF/0C/10/93
+- Example topmark: DALLAS 18B20 2402C4 +817AB *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
+- Example topmark: HXY 18B20 2340
+- Example topmark: MSKSEMI 18B20 2420
 	
 ### Family B1: GXCAS 18B20, Matching Datasheet Temperature Offset Curve
 ***Obtained probes from a number of vendors in 2019, obtained chips from two vendors in 2019. One vendor sent chips marked UMW rather than DALLAS***
@@ -425,30 +452,6 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: JSMSEMI 18B20 3X31
 - Example topmark: HT18B20 ARTZ #465142
 - Indent mark: *none*
-
-### Family H: Watch Out!
-***Obtained neither chips nor probes in 2019. Bought chips in 2024, also observed in the wild (cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))***
-
-*This family was added to the list in 2024.*
-
-* ROM patterns \[5\]: 28-tt-tt-tt-00-00-00-crc
-	- Note that genuine chips with this ROM pattern were produced over 15 years ago.
-	- Note that a ROM of this pattern predates the ``C4`` die. I.e., a chip with a topmark DALLAS 18B20 and ``C4`` die together with this ROM is not genuine.
-* Scratchpad register ``<byte 6> = 0x0C`` at power-up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
-* Does not return data on undocumented function code 0x93 but returns data on undocumented function code 0x68, \[5\].
-* Default alarm register settings differ from Family A1 (``0x7F`` and ``0x80``) \[5\].
-* A sample of 20 sensors had an average temperature offset of +0.11 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
-* Polling for completion of the temperature conversion produces valid readings only after a slight delay (&leq; 1 ms) following the initation of temperature conversion, \[5\]. This contrasts with sensors of Families A-G that indicate without delay (if applicable).
-	- Delayed polling after function code 0x44 indicates approx. 589-621 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
-* Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
-
-- Example ROM: 28-3E-43-87 **-00-00-00-** 18 *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
-- Example ROM: 28-CA-BA-61 **-00-00-00-** A3
-- Example ROM: 28-06-64-2B **-00-00-00-** 46
-- Initial Scratchpad: 50/05/7F/80/7F/FF/0C/10/93
-- Example topmark: DALLAS 18B20 2402C4 +817AB *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
-- Example topmark: HXY 18B20 2340
-- Example topmark: MSKSEMI 18B20 2420
 
 ### Obsolete as of 2019
 ***Obtained neither probes nor chips in 2019***
