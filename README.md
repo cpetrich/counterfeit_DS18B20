@@ -403,7 +403,7 @@ The chips follow the description of Family A1 above with the following exception
 * Temperature conversion is 20 to 25 ms, independent of the selected resolution \[5\]. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
 * Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
-* 
+
 - Example ROM: 28 **-00-** 74-28 **-59-43-** 0F-7A
 - Example ROM: 28 **-00-** 2A-50 **-0C-41-** 02-DB
 - Initial Scratchpad: 50/05/4B/46/7F/FF/10/10/BD
