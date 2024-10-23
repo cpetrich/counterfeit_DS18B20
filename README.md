@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 21 Oct 2024.
+> Author: Chris Petrich, 22 Oct 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -16,7 +16,7 @@ There are two Arduino sketches provided to test DS18B20 sensors:
 * ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
 * ``classify_fake_DS18B20.ino`` is a minimal implementation matching a sensor to a specific Family (see below) based on the response to undocumented function codes. Output is specific but rather boring. Use at your own risk.
 
-(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families B1-v2 and E-H on this page. Also, much of the content of this page does not yet account for those families.)
+(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families A3, B1v2 and E-G on this page. Also, much of the content of this page does not yet account for those families.)
 
 Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
 
@@ -84,7 +84,7 @@ In addition to obvious implementation differences such as those listed above und
 * 577-626 ms: Family A3 *(2024)*
 * 585-730 ms: Family B
 
-Hence, there will be some edge cases between Families A, B and H, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
+Hence, there will be some edge cases between Families A1, A3, and B, but simply measuring the time used for temperature conversion will often be sufficient to determine if a sensor is counterfeit.
 
 An important aspect for operation is a sensor's ability to pull the data line low against the fixed pull-up resistor. Turns out this abilitly differs between families. The datasheet guarantees that a sensor is able to sink at least 4 mA at 0.4 V at any temperature up to 125 °C \[1\]. Providing a current of 4 mA (1.2 kOhm pull-up resistor against 5 V), the following ``low`` voltages were achieved by the sensors at room temperature (note that only 5 to 10 sensors were measured per Family):
 * Family A1: 0.058 - 0.062 V
@@ -204,6 +204,7 @@ The chips follow the description of Family A1 above with the following exception
 * Polling for completion of the temperature conversion produces valid readings only after a slight delay (&leq; 1 ms) following the initation of temperature conversion, \[5\]. This contrasts with all other sensors of Families A-E and G that implement this feature.
 	- Delayed polling after function code 0x44 indicates approx. 589-621 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
 
 - Example ROM: 28-3E-43-87 **-00-00-00-** 18 *(cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))*
 - Example ROM: 28-CA-BA-61 **-00-00-00-** A3
@@ -228,6 +229,7 @@ The chips follow the description of Family A1 above with the following exception
 * Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates approx. 589-728 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
 * The die has "GXCAS" written on it.
 
 - Example ROM: 28 **-AA-** 3C-61-55-14-01-F0
@@ -242,7 +244,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: UMW 18B20 1935C4
 - Indent mark: *none*
 
-### Family B1-v2: Why this Update?
+### Family B1v2: Why this Update?
 ***Obtained neither chips nor probes in 2019. Obtained chips in 2024, also see Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40)***
 
 *These chips seem to have appeared on the market ca. 2024 as reported in Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40). While the undocumented features seem to match those of Family B1, the behavior of the scratchpad register has changed to better match Family A1.*
@@ -257,6 +259,7 @@ The chips follow the description of Family A1 above with the following exception
 * Temperature offset as shown on the Maxim datasheet (-0.15 °C at 0 °C) \[6\]. Very little if any temperature discretization noise \[5\].
 * Polling after function code 0x44 indicates around 650 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
 
 - Example ROM: 28-E4-FA-2F **-57-23-0B-** AF (cf. Issue [40](https://github.com/cpetrich/counterfeit_DS18B20/issues/40))
 - Example ROM: 28-0D-72-9A **-20-23-07-** C3
@@ -281,6 +284,7 @@ The chips follow the description of Family A1 above with the following exception
 	- In 2024, a sample of 10 sensors had an average temperature offset of -0.24 °C at 0 °C \[5\]. *(2024)*
 * Polling after function code 0x44 indicates approx. 587-697 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
 * The die has "7Q-Tek" written on it (using the Chinese character for digit 7).
 
 - Example ROM: 28 **-FF-** 7C-5A-61-16-04-EE
@@ -398,7 +402,8 @@ The chips follow the description of Family A1 above with the following exception
 * A sample of 10 sensors had an average temperature offset of +0.02 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\]. *(2024)*
 * Temperature conversion is 20 to 25 ms, independent of the selected resolution \[5\]. (The NS18B20 datasheet specifies maximum 50 ms irrespective of resolution.)
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
-
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
+* 
 - Example ROM: 28 **-00-** 74-28 **-59-43-** 0F-7A
 - Example ROM: 28 **-00-** 2A-50 **-0C-41-** 02-DB
 - Initial Scratchpad: 50/05/4B/46/7F/FF/10/10/BD
@@ -423,6 +428,8 @@ The chips follow the description of Family A1 above with the following exception
 * Completion of temperature conversion cannot be polled (functionality not implemented), \[5\],\[18\].
 	+ Typical conversion time 27 ms as per datasheet, \[18\].
 * Parasitic power mode does not work with Vcc pulled to GND, \[5\]. Instead, parasitic power mode works with Vcc left floating, \[5\],\[18\].
+* Returns a power-up temperature of 85 °C if scratchpad register is read before temperature conversion has completed in parasitic power mode. \[5\].
+	- Some sensors leave the data line floating if scratchpad register is read before temperature conversion has completed in parasitic power mode, and will eventually reset to a power-up temperature of 85 °C. \[5\].
 
 - Example ROM: 28-03-60 **-00-00-01-** 24-D0
 - Initial Scratchpad: 50/05/55/00/7F/FF/0C/10/21
@@ -443,6 +450,7 @@ The chips follow the description of Family A1 above with the following exception
 * A sample of 27 sensors had an average temperature offset of -0.22 °C at 0 °C with a spread comparable to other Families \[5\]. Noise of individual sensors was comparable to sensors of other Families \[5\].
 * Polling after function code 0x44 indicates approx. 227-293 ms for a 12-bit temperature conversion and proportionally less at lower resolution \[5\].
 * Sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+* Pulls data line low(!) if conversion is interrupted by reading scratchpad register in parasite power mode, and will eventually recover to complete the conversion afterwards (up to >1000 ms later). \[5\].
 
 - Example ROM: 28-C7-9E-A3-59-83-D9-74
 - Example ROM: 28-95-77-37-3F-4A-FB-1F
@@ -450,6 +458,27 @@ The chips follow the description of Family A1 above with the following exception
 - Initial Scratchpad: 50/05/55/AA/7F/FF/0C/10/AF
 - Example topmark: ZHHXDZ HX18B20 24+6
 - Example topmark: JSMSEMI 18B20 3X31
+- Example topmark: HT18B20 ARTZ #465142
+- Indent mark: *none*
+
+### Family <t.b.d.>: Preliminarily assigned group
+***Obtained neither chips nor probes in 2019. Obtained a single chip in 2024***
+
+*This family was preliminarily added to the list in 2024 and may actually be related to Family G.*
+
+* ROM patterns \[5\]: 28-tt-tt-tt-tt-tt-tt-crc (probably random)
+* Scratchpad register ``<byte 6> = 0x0C`` at power up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
+* Does not return data on undocumented function codes 0x68 and 0x93 or any other function codes \[5\].
+* Default alarm register settings differ from Family A1 (``0x55`` and ``0xAA``) \[5\].
+* Contains a large buffer capacitor such that a 100 ms power cycle is too short to reset the scratchpad register, \[5\].
+* The one sample investigated had a temperature offset of -0.12 °C at 0 °C \[5\]. Noise of the sensor was comparable to sensors of other Families \[5\].
+* Polling after function code 0x44 indicates 101 ms, 141 ms, 198 ms, and 279 ms at a resolution of 9, 10, 11, and 12 bits, respectively, i.e. a factor of 1.4 rather than a factor of 2 between the resolution settings \[5\].
+* In principle, the sensor indicates when in parasitic power mode, temperature conversion in parasitic power mode is working (based on cursory test) \[5\].
+	- Switch back-and-forth between parasitic power and normal power is not reliably indicated by the sensor \[5\].
+* Leaves data line floating if conversion is interrupted by reading scratchpad register in parasite power mode and will report conversion result if queried afterwards. \[5\].
+
+- Example ROM: 28-0C-80-53-5C-AA-8E-A2
+- Initial Scratchpad: 50/05/55/AA/7F/FF/0C/10/AF
 - Example topmark: HT18B20 ARTZ #465142
 - Indent mark: *none*
 
