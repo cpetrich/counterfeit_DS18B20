@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 22 Oct 2024.
+> Author: Chris Petrich, 9 Nov 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -461,12 +461,12 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: HT18B20 ARTZ #465142
 - Indent mark: *none*
 
-### Family <t.b.d.>: Preliminarily assigned group
+### Family H: Different ADC
 ***Obtained neither chips nor probes in 2019. Obtained a single chip in 2024***
 
-*This family was preliminarily added to the list in 2024 and may actually be related to Family G.*
+*This family was added to the list in 2024. The one sample I got was part of a "batch" of sensors labeled HT18B20. So, if you don't want to know what you're getting, ask for a HT18B20.*
 
-* ROM patterns \[5\]: 28-tt-tt-tt-tt-tt-tt-crc (probably random)
+* ROM patterns \[5\]: 28-tt-tt-tt-tt-tt-tt-crc (difficult to say based on one sample)
 * Scratchpad register ``<byte 6> = 0x0C`` at power up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
 * Does not return data on undocumented function codes 0x68 and 0x93 or any other function codes \[5\].
 * Default alarm register settings differ from Family A1 (``0x55`` and ``0xAA``) \[5\].
