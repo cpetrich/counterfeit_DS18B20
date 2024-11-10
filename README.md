@@ -1,22 +1,20 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 9 Nov 2024.
+> Author: Chris Petrich, 10 Nov 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
-(Sensor information based on sensors or probes ordered well into 2020 rather than in or around 2019 are marked "*(2020)*".)
+(Sensor information based on sensors or probes ordered well after 2019 are tagged with the year of addition, e.g. "*(2020)*".)
 
 ## TLDR; How do I know?
 If the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx then the DS18B20 sensor is a clone \[5\].
 
 However, the ROM pattern is not a sufficient test for authenticity. Case in point, if the pattern is 28-xx-xx-xx-00-00-00-xx and the topmark specifies die ``C4`` then the sensor is a clone because that ROM pattern pre-dates the ``C4`` die, cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42). *(2024)*
 
-There are two Arduino sketches provided to test DS18B20 sensors:
-* ``discover_fake_DS18B20.ino`` performs some harmless tests and indicates if they show deviations from authentic DS18B20. Not designed to work with parasitic power.
-* ``classify_fake_DS18B20.ino`` is a minimal implementation matching a sensor to a specific Family (see below) based on the response to undocumented function codes. Output is specific but rather boring. Use at your own risk.
-
-(Note: as of 5 Oct 2024, the sketches are due for an update as they do not reflect the description of the Families A3, B1v2 and E-G on this page. Also, much of the content of this page does not yet account for those families.)
+There is an Arduino sketch provided to test DS18B20 sensors:
+* ``discover-classify_fake_DS18B20.ino`` is a menu-driven sketch that performs harmless tests that inidcate if a sensor shows deviations from Dallas/Maxim/Analog DS18B20. It can optionally attempt to match a sensor to a specific Family (see below), largely based on the response to undocumented function codes (use this function at your own risk). The sketch is not designed to work with parasite power.
+(As of 10 Nov 2024, the two sketches ``discover_fake_DS18B20.ino`` and ``classify_fake_DS18B20.ino`` from 2019 are removed as they are out of date.)
 
 Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
 
