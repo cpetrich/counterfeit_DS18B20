@@ -5,7 +5,7 @@
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
-(Sensor information based on sensors or probes ordered well after 2019 are tagged with the year of addition, e.g. "*(2020)*".)
+(Sensor information based on sensors or probes ordered well after 2019 are either indicated as such or tagged with the year of addition, e.g. "*(2020)*".)
 
 ## TLDR; How do I know?
 If the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx then the DS18B20 sensor is a clone \[5\].
@@ -17,6 +17,39 @@ There is an Arduino sketch provided to test DS18B20 sensors:
 (As of 10 Nov 2024, the two sketches ``discover_fake_DS18B20.ino`` and ``classify_fake_DS18B20.ino`` from 2019 are removed as they are out of date.)
 
 Nomenclature: The ROM 28-AA-BB-CC-DD-EE-FF-0C would be written 28-FFEEDDCCBBAA in the Linux 1-wire subsystem.
+
+## Overview as of 2024
+There is the original/authentic DS18B20 (Family A1) which has stood the test of the time,
+and then there are clones that are either primarily designed to appear as authentic,
+or designed with innovative or at least useful features.
+
+Within the first group we have
+Families A2 (obsolete) and A3 (a recent addition) that seem to have been designed to enter the market as
+counterfeits with the intent to deceive the customer. Family A3 copies every aspect of the originals that had been
+tested for in the 2019 Arduino sketches of this repository in addition to matching the data in the "Temperature data"
+plot, i.e. the the temperature offset at 0 °C and the conversion time (which, by the way, is among the slowest of all clones).
+However, unlike Family A2 (which pre-dates this repository), they stopped there with their efforts to replicate the original
+(the hallmark of a student project...).
+While I am flattered to see that somebody actually designed and manufactures microchips to my specifications I do
+consider this a waste of developer skill and advancement in technology.
+Also in the first group is Family B1v2, which is a recent variant of Family B1 with the 2-byte user memory removed
+to make it act more like an authentic DS18B20: a somewhat sad course of development;
+Family G that, as far as I can tell, doesn't add anything significant but introduces quirks that are either funny
+(cf. byte 6) or will lead to system failure in parasite power mode (like, pulling the data line low(!)); and
+Family H, which looks a bit like Family G without the quirks. Granted, Families G and H perform 12-bit temperature
+conversions twice as fast as the authentic DS18B20, so maybe they deserve credit for that.
+
+The second group of clones is the bright side. We see that
+* GXCAS (Family B1 excluding B1v2), 7Q-Tek (Family B2), Mysentech (Family D), and Novosense (Family E) have added 2 or 3 bytes of user
+memory to their clones (Family E has dedicated function codes to read, write, and store them in EEPROM),
+* Family C, Mysentech (Family D1), and Xinbole (Family F) introduced clones that perform 12-bit temperature conversion in
+under 30 ms, i.e. 5% of the guaranteed conversion time of the authentic DS18B20 (granted, Family D1 has poor temperature performance),
+* Xinbole (Family F) has an extended temperature mode that allows temperatures to be measured up to 150 °C, and
+* Mysentech (Family D2) can enter a 14-bit mode with 0.016 °C resolution.
+
+I really appreciate the hidden gems in some of the chips and the efforts of the engineers behind them.
+However, none of this should be understood as an endorsement as **I have not tested whether the sensors live up to the specification in their
+respective datasheets**, let alone the specifications in the Maxim/Analog datasheet.
 
 ## Why should I care?
 Besides ethical concerns, some of the counterfeit sensors actually do not work in parasitic power mode, have a high noise level, temperature offset outside the advertised ±0.5 °C band, do not contain an EEPROM, have bugs and unspecified failure rates, or differ in another unknown manner from the specifications in the Maxim datasheet. Clearly, the problems are not big enough to discourage people from buying probes on ebay, but it may be good to know the actual specs when the data are important or measurement conditions are difficult.
@@ -44,7 +77,7 @@ Above is an example of an **authentic**, Maxim-produced DS18B20 sensor in TO-92 
 *To avoid confusion: the relevant Maxim part number of the chips investigated here is ``DS18B20+``, i.e. TO-92 package and RoHS compliant. Not everything said on this page may apply to the ``DS18B20+PAR`` parasitic power-only variant (I cannot tell since I have only looked at a handfull of those). For the sake of brevity, the chips are referred to as ``DS18B20`` as written in the datasheet \[1\].*
 
 ## How do I know if I am affected?
-If the DS18B20 have been bought from authorized dealers though a controlled supply chain then the chips are legit.
+If the DS18B20 have been bought from authorized dealers though a controlled supply chain **and** are marked as being produced by either Maxim or Analog Devices then the chips are legit.
 
 Otherwise, (I) one can test for compliance with the datasheet. (One [should](https://www.maximintegrated.com/en/aboutus/maxim-corporate-policies/counterfeit-parts.html) actually, as even authentic parts may have been mishandled along an unauthorized distribution chain. But that's yet another issue.) If a sensor fails any of those tests, it is a fake (unless Maxim's implementation is buggy \[4\]). (II) one can compare sensor behavior with the behavior of Maxim-produced DS18B20. Those tests are based on the conjecture that all Maxim-produced DS18B20 behave alike. This should be the case at least for sensors that share a die code (which has been ``C4`` since at least 2009 \[5\]) \[5\].
 
@@ -64,12 +97,12 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family F: can measure temperatures up to 150 °C (rather than 125 °C)
 * Family A3: polling for completion of temperature conversion works only after some delay
 
-Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Family G.)
+Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Families G or H.)
 
 Regarding (II), there is one pathetically simple test for differences with Maxim-produced DS18B20 sensors that most counterfeit sensors fail \[5\]:
 * It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (They ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
-Only Family A3 makes an effort to thwart this rule.
-Also, with the exception of rare Family A2 and Families A3 and B1v2, none of the clones set reserved byte 6 in the scratchpad register correctly. Only the clones of Family A2 and A3 respond correctly to undocumented function codes regarding the Trim values.
+Only Family A3 makes an effort to thwart this rule, but as of 2024, they are overdoing it.
+Also, with the exception of rare Family A2 and Families A3, B1v2, and H, none of the clones set reserved byte 6 in the scratchpad register correctly. Only the clones of Family A2 and A3 respond correctly to undocumented function codes regarding the Trim values.
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
 * 11 ms: Family D1
@@ -93,12 +126,12 @@ An important aspect for operation is a sensor's ability to pull the data line lo
 All sensors are well within specs at room temperature but clustering of data by Family is apparent, indicating that the hardware was designed independently. It could be interesting to repeat these measurements above 100 °C.
 
 Alternatively,
-* It is a fake if the date--batch combination printed on the case of the sensor is not in the Maxim database (need to ask Maxim tech support to find out). (Note that there are counterfeits that use "authentic" date--batch combination.)
+* It is a fake if the date--batch combination printed on the case of the sensor is not in the Maxim database (need to ask Maxim tech support to find out). (Note that there are counterfeits that use "authentic" date--batch combination, so maybe forget this option.)
 
-Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely counterfeit \[5\].
+Note that none of the points above give certainty that a particular DS18B20 is an authentic Maxim product, but if any of the tests above indicate "fake" then it is most defintely a clone \[5\].
 
 ## What families of DS18B20-like chips can I expect to encounter?
-In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A1, below), there are TO-92 clones produced independently by at least 5 other companies as of 2019 (Families B1, B2, C, D, E) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2. Chips of Family A2 were a rare find, behave surprisingly similar to authentic chips but have poor temperature accuracy. Chips of Family E are a new addition to this page as of 2022.
+In addition to DS18B20 originally produced by Dallas Semiconductor and continued by Maxim Integrated after they purchased Dallas (Family A1, below), there are TO-92 clones produced independently by at least 5 other companies as of 2019 (Families B1, B2, C, D, E) \[5\]. The separation into families is based on patterns in undocumented function codes that the chips respond to as similarities at that level are unlikely to be coincidental \[5\]. Chips of Family B1 seem to be produced by [GXCAS](http://www.galaxy-cas.com/) and calibrated and sold independently by GXCAS and [UMW](http://umw-ic.com/). Chips of Family B2 are produced by [Beijing 7Q Technology (7Q-Tek)](http://www.7qtek.com). Both UMW and 7Q-Tek have corresponding datasheets on their respective web pages. Family D1 seems to be fading from sight, having been replaced by Family D2. Chips of Family A2 were a rare find, behave surprisingly similar to authentic chips but have poor temperature accuracy. Chips of Family E are a new addition to this page as of 2022, and Families F, G, H, A3, and B1v2 were added in 2024.
 
 In our ebay purchases in 2018/19 of waterproof DS18B20 probes from China, Germany, and the UK, most lots had sensors of Family B1, while one in three purchases had sensors of Family D. None had sensors of Family A1 or C. Neither origin nor price were indicators of sensor Family. When purchasing DS18B20 chips in TO-92 package, Family D2 was clearly dominant with Family B2 coming in second, and a small likelihood of obtaining chips of Families A1 or C.
 
@@ -158,7 +191,7 @@ The chips follow the description of Family A1 above with the following exception
 - Example topmark: DALLAS 18B20 1136C4 +152AI
 - Indent mark: ``THAI <letter>``
 
-### Family A2: Good Clone with Poor Temperature Performance
+### Family A2: Good Copy with Poor Temperature Performance
 ***Obtained no probes containing these chips on ebay or AliExpress in 2019, but obtained chips from one vendor in 2019***
 
 *These chips are not Maxim-produced.*
@@ -462,7 +495,7 @@ The chips follow the description of Family A1 above with the following exception
 ### Family H: Different ADC
 ***Obtained neither chips nor probes in 2019. Obtained a single chip in 2024***
 
-*This family was added to the list in 2024. The one sample I got was part of a "batch" of sensors labeled HT18B20. So, if you don't want to know what you're getting, ask for a HT18B20.*
+*This family was added to the list in 2024. The one sample I got was part of a "batch" of sensors labeled HT18B20: they were Tape & Reel packaged, and this one sensors was different than the others. So, if you don't want to know what you're getting, ask for a HT18B20.*
 
 * ROM patterns \[5\]: 28-tt-tt-tt-tt-tt-tt-crc (difficult to say based on one sample)
 * Scratchpad register ``<byte 6> = 0x0C`` at power up, and ``<byte 6> = 0x10 – (<byte 0> & 0x0f)`` after temperature conversion, \[5\].
