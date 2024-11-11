@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 10 Nov 2024.
+> Author: Chris Petrich, 11 Nov 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -27,7 +27,7 @@ Within the first group we have
 Families A2 (obsolete) and A3 (a recent addition) that seem to have been designed to enter the market as
 counterfeits with the intent to deceive the customer. Family A3 copies every aspect of the originals that had been
 tested for in the 2019 Arduino sketches of this repository in addition to matching the data in the "Temperature data"
-plot, i.e. the the temperature offset at 0 °C and the conversion time (which, by the way, is among the slowest of all clones).
+plot, i.e. the temperature offset at 0 °C and the conversion time (which, by the way, is among the slowest of all clones).
 However, unlike Family A2 (which pre-dates this repository), they stopped there with their efforts to replicate the original
 (the hallmark of a student project...).
 While I am flattered to see that somebody actually designed and manufactures microchips to my specifications I do
@@ -220,7 +220,7 @@ The chips follow the description of Family A1 above with the following exception
 ### Family A3: Designed to Deceive
 ***Obtained neither chips nor probes in 2019. Bought chips in 2024, also observed in the wild (cf. Discussion [42](https://github.com/cpetrich/counterfeit_DS18B20/discussions/42))***
 
-*This family was added to the list in 2024. It seems to have been specifically designed to pass all tests of the 2019 Arduino sketches on this site. In addition, sensors have the same temperature offset at 0 °C as Family A1, and the same conversion time. However, this Family is distinguished from authentic Family A1 by small differences in the implementation of the temperature calibration and a bug in the reporting of ongoing temperature conversion. It would make me a little bit proud to know that somebody actually designed and mass-produced microchips based on what they read on this site.*
+*This family was added to the list in 2024. It seems to have been designed to pass all tests of the 2019 Arduino sketches on this site.*
 
 * ROM patterns \[5\]: 28-tt-tt-tt-00-00-00-crc
 	- Note that genuine chips with this ROM pattern were produced over 15 years ago.
