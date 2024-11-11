@@ -251,8 +251,8 @@ void loop_test_alarm() {
     ds->reset_search();
     while (ds->search(addr)) {
       if (!read_scratchpad(addr, buffer)) read_scratchpad(addr, buffer);
-      current_min_T = min(current_min_T, (int8_t)(buffer[1]*16 + buffer[0] / 16));
-      current_max_T = max(current_max_T, (int8_t)(buffer[1]*16 + buffer[0] / 16));
+      current_min_T = min(current_min_T, (int16_t)(buffer[1]*16 + buffer[0] / 16));
+      current_max_T = max(current_max_T, (int16_t)(buffer[1]*16 + buffer[0] / 16));
 
       Comm.print(F("  "));
       print_array(addr, 8, '-');
