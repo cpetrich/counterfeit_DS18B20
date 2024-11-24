@@ -551,7 +551,7 @@ void loop_discover() { // this is the safe choice
     } else if ((addr[6] == 0) && (addr[5] == 0) && (addr[4] == 0) && (addr[0] == 0x28)) {
       // catches Family A3
       fake_flags += 1;
-      Comm.print(F(": ROM pattern pre-dates C4 die version, suggesting the the chip is either"));
+      Comm.print(F(": ROM pattern pre-dates C4 die version, suggesting the chip is either"));
       Comm.print(F(" over 15 years old or a clone.\n                         Assuming sensor is a clone. Error."));
     } else {
       Comm.print(F(": ROM ok."));
