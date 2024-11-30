@@ -97,11 +97,11 @@ Regarding (I), discrepancy between what the current datasheet says should happen
 * Family F: can measure temperatures up to 150 °C (rather than 125 °C)
 * Family A3: polling for completion of temperature conversion works only after some delay
 
-Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Families G or H.)
+Hence, as of 2019, every fake sensor available did not comply with the datasheet in at least one way. (As of 2024, this cannot be said of Families A3 or H.)
 
-Regarding (II), there is one pathetically simple test for differences with Maxim-produced DS18B20 sensors that most counterfeit sensors fail \[5\]:
-* It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (They ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].)
-Only Family A3 makes an effort to thwart this rule, but as of 2024, they are overdoing it.
+Regarding (II), there is one reasonably simple test for differences with Maxim-produced DS18B20 sensors that most counterfeit sensors fail \[5\]:
+* It is a fake if its ROM address does not follow the pattern 28-xx-xx-xx-xx-00-00-xx, except if it follows the pattern 28-xx-xx-xx-00-00-00-xx and claimes to contain a ``C4`` die \[5\]. (The ROM is essentially a 48-bit counter with the most significant bits still at 0 \[5\].) *(2024)*
+Only Family A3 uses a deceptive ROM, but as of 2024, they are overdoing it.
 Also, with the exception of rare Family A2 and Families A3, B1v2, and H, none of the clones set reserved byte 6 in the scratchpad register correctly. Only the clones of Family A2 and A3 respond correctly to undocumented function codes regarding the Trim values.
 
 In addition to obvious implementation differences such as those listed above under (I) and (II), there are also side-channel data that can be used to separate implementations. For example, the time reported for a 12 bit-temperature conversion (as determined by polling for completion after function code 0x44 at room temperature) is characteristic for individual chips (reproducible to much better than 1% at constant temperature) and falls within distinct ranges determined by the circuit's internals \[5\]:
