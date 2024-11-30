@@ -1,7 +1,7 @@
 # Your DS18B20 temperature sensor is likely a fake, counterfeit, clone...
 ...unless you bought the chips directly from [Analog Devices](https://www.analog.com/en/products/ds18b20.html) (or Maxim Integrated before Analog Devices acquired them, or Dallas Semiconductor in the old days), an [authorized distributor](https://www.analog.com/en/support/find-sale-office-distributor.html) (DigiKey, RS, Farnell, Mouser, etc.), or a big retailer, or you took exceptionally good care purchasing waterproofed DS18B20 probes. We bought over 1000 "waterproof" probes or bare chips from more than 70 different vendors on ebay, AliExpress, and online stores -big and small- in 2019. All of the probes bought on ebay and AliExpress contained counterfeit DS18B20 sensors, and almost all sensors bought on those two sites were counterfeit.
 
-> Author: Chris Petrich, 11 Nov 2024.
+> Author: Chris Petrich, 30 Nov 2024.
 > License: CC BY.
 > Source: https://github.com/cpetrich/counterfeit_DS18B20/
 
@@ -599,7 +599,7 @@ An ideal sensors would only show discretization noise, i.e. have readings fluctu
 The time required for temperature data conversion is specified as maximum 750 ms in the datasheet (12 bit conversion). The actual time required has (at a given temperature) a well-reproducible, characteristic value for each sensor. This time is shown in plot (c). Family A1 takes around 600 ms for a conversion, while Families A2 and B show a comparatively large inter-sensor variability. Families C and D1 are remarably fast at 30 and 11 ms, respectively, while Family D2 takes around 500 ms or a little less. Although all sensors we measured were faster than 750 ms at room temperature, some sensors of Family B got close to the limit.
 
 ## Warning
-**Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuine sensors, we have not come across sensors with spoofed ROM \[5\].)
+**Sending undocumented function codes to a DS18B20 sensor may render it permanently useless,** for example if temperature calibration coefficients are overwritten \[5\]. The recommended way of identifying counterfeit sensors is to check whether the ROM does not follow the pattern 28-xx-xx-xx-xx-00-00-xx, excluding those of pattern 28-xx-xx-xx-00-00-00-xx \[5\]. (While the ROM can be overwritten in Families B1 and D1 to mimic genuine sensors, we have not come across sensors with spoofed ROM \[5\]. But take note of Family A3.) *(2024)*
 
 (*Information on chips of Families A, B, C, D, E, F, G, and H comes from my own investigations of sensors in conjunction with the references below as indicated by reference number \[1-6,8-10,12-18\]. All tests were performed at 5 V with 1.2 kOhm pull-up. Decapping was performed jointly with Nga P. Dang, and measurements of temperature offsets and timing with Irina Sæther and Megan O'Sadnick.*)
 
